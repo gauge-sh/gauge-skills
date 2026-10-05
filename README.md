@@ -33,3 +33,24 @@ Each skill can also be installed independently by passing only its name.
 - “Use Gauge Agents to compare which email tools agents select and why.”
 - “Use Gauge Chat to explain why our competitors appear in answers where we don't.”
 - “Use Gauge Chat to draft an update to the page most likely to improve our AI visibility.”
+
+## Gauge Agents input setup
+
+[`gauge.json`](gauge.json) declares two committed Skill inputs, `gauge-agents`
+and `gauge-chat`. Each selects its own directory and root `SKILL.md` at the
+candidate commit. No build or artifact-upload workflow is required.
+
+The config sets `org` to the Gauge organization (`gauge-x6af`). No eval cases
+are included: the Gauge Agents App reports **No evals configured** as a skipped
+check without preparing inputs, starting sessions, or reserving credits. Add the
+first cases under `gauge-evals/` when ready to evaluate this surface. In that organization's
+**Settings → GitHub**, ensure the existing **Gauge Agents** installation includes
+`gauge-sh/gauge-skills` and enable checks for the intended target branches.
+Repository access and check settings are managed outside this config; merging
+it does not grant App access. The App needs Contents read and Checks/Pull requests write.
+
+Future cases should select `config.inputs: [gauge-agents]` or
+`config.inputs: [gauge-chat]` to test one Skill at a time; omitting the selection
+attaches both. Skill inputs do not install the CLI or authorize the MCP connection.
+`checks.paths` watches both Skill directories; Gauge always watches `gauge.json`
+and case paths too. These inputs do not create evals or launch sessions by themselves.

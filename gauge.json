@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "org": "gauge-x6af",
+  "checks": {
+    "paths": ["gauge-agents/**", "gauge-chat/**"]
+  },
+  "inputs": {
+    "gauge-agents": {
+      "type": "skill",
+      "source": { "type": "git" },
+      "path": "gauge-agents"
+    },
+    "gauge-chat": {
+      "type": "skill",
+      "source": { "type": "git" },
+      "path": "gauge-chat"
+    }
+  }
+}
