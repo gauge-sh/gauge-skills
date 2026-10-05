@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "org": "gauge-x6af",
   "checks": {
     "paths": ["gauge-agents/**", "gauge-chat/**"]
   },

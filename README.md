@@ -40,10 +40,10 @@ Each skill can also be installed independently by passing only its name.
 and `gauge-chat`. Each selects its own directory and root `SKILL.md` at the
 candidate commit. No build or artifact-upload workflow is required.
 
-The config intentionally omits `org`, and no eval cases are included. This keeps
-the Gauge Agents App from creating empty-case checks during setup. When adding
-the first cases under `gauge-evals/`, set `org` to the Gauge organization connected
-to the App (currently `gauge-x6af`) in the same PR. In that organization's
+The config sets `org` to the Gauge organization (`gauge-x6af`). No eval cases
+are included: the Gauge Agents App reports **No evals configured** as a skipped
+check without preparing inputs, starting sessions, or reserving credits. Add the
+first cases under `gauge-evals/` when ready to evaluate this surface. In that organization's
 **Settings → GitHub**, ensure the existing **Gauge Agents** installation includes
 `gauge-sh/gauge-skills` and enable checks for the intended target branches.
 Repository access and check settings are managed outside this config; merging
