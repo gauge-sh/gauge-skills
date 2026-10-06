@@ -32,7 +32,7 @@ config:
   sampleCount: 1
   repoUrl: https://github.com/gauge-sh/alg
   repoRef: f14a08ff6072f96bc8f0d692303ac5d2474c7e8c
-  profileId: cmuvuvxs5000801i9z1mhjmdr
+  profileId: cmuvx341u006s01hyj7iyctpy
   inputs:
   - gauge-agents
 ---
