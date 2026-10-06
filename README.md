@@ -45,9 +45,14 @@ The config sets `org` to the Gauge organization (`gauge-x6af`).
 [`gauge-evals/pr-setup-cli.md`](gauge-evals/pr-setup-cli.md) tests the request
 “Set up Gauge PR checks for this repo” against a pinned pre-setup CLI checkout.
 It selects only the candidate `gauge-agents` Skill and runs one Codex/GPT-6.1 Sol
-session per eligible PR update. Its persona preserves setup-only scope and supplies
-no remote write credentials, so the inner task produces a patch without launching
-nested evals. In that organization's
+session per eligible PR update. Four additional public-repository cases cover
+Vite, GitHub CLI, FastAPI, and Astro docs, with one sample each on DeepSeek V4.1
+Flash and GLM 5.3 through OpenCode. The complete suite launches **nine sessions**
+per eligible update. See [eval coverage and interpretation](EVALS.md).
+
+The personas preserve setup-only scope and supply no remote write credentials,
+so the inner tasks produce local setup changes or actionable fallback handoffs
+without launching nested evals. In that organization's
 **Settings → GitHub**, ensure the existing **Gauge Agents** installation includes
 `gauge-sh/gauge-skills` and enable checks for the intended target branches.
 Repository access and check settings are managed outside this config; merging
@@ -57,4 +62,4 @@ Future cases should select `config.inputs: [gauge-agents]` or
 `config.inputs: [gauge-chat]` to test one Skill at a time; omitting the selection
 attaches both. Skill inputs do not install the CLI or authorize the MCP connection.
 `checks.paths` watches both Skill directories; Gauge always watches `gauge.json`
-and case paths too. The case above supplies the eval that consumes the selected Skill input.
+and case paths too. The cases supply the evals that consume the selected Skill input.
