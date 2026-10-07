@@ -76,15 +76,48 @@ package inside it. Select exactly one `.tgz`. Omit the artifact name only if the
 workflow produces exactly one artifact. A Git Skill path names the directory,
 not the `SKILL.md` file; use `"."` for a root Skill.
 
-Optional `checks.paths` globs filter relevant changes. Include source and build
-configuration that affect the selected surface. Ensure CI's own path filters also
-run for configuration and case changes that need a fresh candidate artifact.
+Use the published v2.5.0 schemas for accepted fields and enum values:
 
-The published config schema is
-https://agents.withgauge.com/schemas/gauge/v2.4.0/gauge.json.
-Associate it in an editor or validate against it externally; do not add `$schema`
-to `gauge.json`, whose runtime schema is strict. Use current CLI help and the
-published schema if repository examples disagree with these shapes.
+- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.5.0/gauge.json)
+- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.5.0/case.json)
+
+Associate the schemas in an editor or validate against them externally; do not
+add `$schema` to `gauge.json`, whose runtime schema is strict. Use current CLI help and the
+published schemas if repository examples disagree with these shapes. The schema
+release is v2.5.0; the configuration's `version` remains `2`.
+
+## Choose when each eval runs
+
+The optional `checks.paths` in root `gauge.json` gates the whole suite. To run
+an individual eval only for relevant file changes, use CLI **0.16.0 or later**
+and add `config.checks.paths` to that case's Markdown frontmatter. For example,
+merge this fragment into the case's existing `config`, preserving its agents,
+inputs, and other settings:
+
+```yaml
+config:
+  checks:
+    paths: ["docs/**", ".github/workflows/docs-preview.yml"]
+```
+
+Use positive, repository-relative, case-sensitive globs; any matching pattern
+selects the case. Cases without a filter run whenever the suite runs. If a root
+filter is present, include every path that should trigger any case, or omit it
+and let the cases decide. Include relevant source and build configuration, and
+ensure CI's own filters also build artifacts for configuration and case changes.
+`config.inputs` selects what a case receives, not which changes trigger it.
+
+Changes to `gauge.json` select all cases; editing a case selects that case even
+when its own paths do not match. After a passing evaluation, subsequent updates
+compare against that evaluated commit. A failed or unfinished prior evaluation,
+changed target branch, or unavailable or incomplete diff runs conservatively
+instead of skipping. If no cases match, Gauge skips without preparing inputs or
+launching sessions.
+
+Explicit GitHub reruns bypass both path filters and select the full suite, while
+still honoring repository access and target-branch settings. Manual CLI
+`gauge evals plan` and `gauge evals run` do not apply these automatic filters;
+`gauge evals verify` validates all discovered cases locally.
 
 ## Reuse candidate CI
 
