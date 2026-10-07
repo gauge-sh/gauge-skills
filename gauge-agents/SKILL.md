@@ -30,7 +30,8 @@ Follow the returned instructions for setup and operation. They ship with the CLI
 
 When asked to set up Gauge PR checks or connect a repository, read
 [references/github-setup.md](references/github-setup.md). It covers choosing
-inputs for a CLI, docs site, or Skill and reusing the repository’s CI.
+inputs for an npm package, native CLI, docs preview, or Skill, reusing the
+repository’s CI, and verifying setup before committing.
 
 ## What Gauge is
 
