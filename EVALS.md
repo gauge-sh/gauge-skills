@@ -83,6 +83,30 @@ findings with repeated samples or a frontier model before generalizing.
 
 ## Next measurement
 
+The suite at `2847660` finished **7/9 passing**. Both failures were Astro docs
+(`accounts/fireworks/models/deepseek-v4p1-flash` and `z-ai/glm-5.3`), each with
+2/3 criteria passing. Their patches correctly configured canonical-origin
+routing and candidate-specific preview discovery; both passed validation and
+activation handoff. The rendered-docs criterion failed solely because their
+final responses did not repeat the public-origin/live-not-snapshot caveats.
+Evidence: [DeepSeek session](https://agents.withgauge.com/gauge-x6af/runs/cmuxh5muq000n0iuqzzp0sjs5)
+and [GLM session](https://agents.withgauge.com/gauge-x6af/runs/cmuxh5muq000o0iuq51jdpqu9).
+Both sessions installed CLI 0.14.0, then the latest release, and used external
+schema/regex validation because `gauge evals verify` was unavailable.
+
+The revised rendered-docs criterion keeps the functional requirements and
+rejects unsupported previews, false snapshot claims, and undisclosed blockers.
+It no longer requires a generic caveat recital for an otherwise correct setup.
+The other criteria, prompts, pinned fixtures, personas, models, samples, inputs,
+and candidate Skill are unchanged. CLI 0.16.0 is now npm latest, and alg #1600
+and #1604 are deployed, including detailed failure comments. This authorized
+rerun is still nine sessions. Record the CLI version actually used in each
+session; a latest-version install is not a pinned experimental control.
+
+Because the rubric and available CLI changed, the rerun is a new regression
+measurement, not evidence of Skill improvement. Preserve the earlier results
+rather than retroactively regrading them to establish a better baseline.
+
 Before pushing an eligible update or explicitly rerunning this suite, confirm the
 rollout is ready: the CLI customers install exposes `gauge evals verify`, the
 published v2.4.0 schemas are available, and the control plane and execution path

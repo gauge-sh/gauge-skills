@@ -18,8 +18,12 @@ criteria:
       Preserve existing deployment behavior and reuse usable preview evidence
       without requiring a provider migration or redundant deployment workflow.
       Source MDX, static-file delivery, or a production-docs fetch alone does not
-      satisfy the rendered-preview goal. The agent accurately describes material
-      limits: previews must be public origins and are live rather than snapshots.
+      satisfy the rendered-preview goal. Reject configurations requiring private,
+      authenticated, or path-prefixed previews, and false claims that Gauge
+      snapshots live preview pages. The handoff must disclose limitations that
+      prevent the chosen setup from working. Omitting generic access or snapshot
+      caveats from the final response is not by itself a failure when the setup
+      is supported and material blockers are disclosed.
   - name: Grounded validation and activation handoff
     rubric: >-
       Any setup patch uses actual paths and supported config fields and is
