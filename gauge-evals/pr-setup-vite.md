@@ -34,6 +34,8 @@ criteria:
       nested eval cases, or paid launches are required. Source inspection alone
       must not be described as a completed package smoke test.
 config:
+  checks:
+    paths: ["gauge-agents/**"]
   agents:
     - agent: OPENCODE
       models:

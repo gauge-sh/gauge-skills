@@ -39,6 +39,8 @@ criteria:
       write, nested eval, paid run, or live preview access is required; report any
       unavailable external verification as a remaining step.
 config:
+  checks:
+    paths: ["gauge-agents/**"]
   agents:
     - agent: OPENCODE
       models:

@@ -28,10 +28,11 @@ Follow the returned instructions for setup and operation. They ship with the CLI
 
 ## Set up repository PR checks
 
-When asked to set up Gauge PR checks or connect a repository, read
+When asked to set up Gauge PR checks, author Git-based eval cases, or connect a repository, read
 [references/github-setup.md](references/github-setup.md). It covers choosing
 inputs for an npm package, native CLI, docs preview, or Skill, reusing the
-repository’s CI, and verifying setup before committing.
+repository’s CI, authoring advisory Agent Preference cases, selecting relevant
+file changes, and verifying setup before committing.
 
 ## What Gauge is
 

@@ -25,6 +25,8 @@ criteria:
     rather than pretending checks or remote installation succeeded. Live GitHub writes and paid
     nested evals are not required. Do not penalize missing outside access as a code failure.
 config:
+  checks:
+    paths: ["gauge-agents/**"]
   agents:
   - agent: CODEX_CLI
     models:
