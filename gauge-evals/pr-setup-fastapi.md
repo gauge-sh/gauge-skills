@@ -31,6 +31,8 @@ criteria:
       copying Python source or choosing a consumer repo alone proves installation
       of the PR's distribution in a separate application.
 config:
+  checks:
+    paths: ["gauge-agents/**"]
   agents:
     - agent: OPENCODE
       models:

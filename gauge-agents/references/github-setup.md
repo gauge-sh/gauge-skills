@@ -76,15 +76,75 @@ package inside it. Select exactly one `.tgz`. Omit the artifact name only if the
 workflow produces exactly one artifact. A Git Skill path names the directory,
 not the `SKILL.md` file; use `"."` for a root Skill.
 
-Use the published v2.5.0 schemas for accepted fields and enum values:
+Use the published v2.6.0 schemas for accepted fields and enum values:
 
-- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.5.0/gauge.json)
-- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.5.0/case.json)
+- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.6.0/gauge.json)
+- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.6.0/case.json)
 
 Associate the schemas in an editor or validate against them externally; do not
 add `$schema` to `gauge.json`, whose runtime schema is strict. Use current CLI help and the
 published schemas if repository examples disagree with these shapes. The schema
-release is v2.5.0; the configuration's `version` remains `2`.
+release is v2.6.0; the configuration's `version` remains `2`.
+
+## Choose experience criteria or preference measurement
+
+Each case under `gauge-evals/` declares exactly one of `criteria` or `preference`.
+Use criteria for observable success/failure; use preference to measure which
+product the agent selects, using the same analysis as preference prompts in the
+app. Keep one case per scenario and the usual `config` fields for agents, models,
+samples, inputs, repository, and persona. Do not create saved prompts or add
+markets, schedules, thresholds, or comparison policies to Git case frontmatter.
+
+Preference frontmatter requires a CLI release with Git-authored Agent Preference
+support and the v2.6.0 schema; CLI 0.16.0 and earlier reject it. Check installed
+instructions/help and the published schema before authoring preference cases.
+If unavailable, explain the release prerequisite rather than replacing the
+measurement with pass/fail criteria. Existing experience cases and per-case
+path filters remain supported by CLI 0.16.0 and the v2.5.0 schemas.
+
+For an open-ended choice:
+
+```markdown
+---
+preference:
+  kind: open-ended
+config:
+  agents:
+    - agent: CODEX_CLI
+  sampleCount: 1
+  inputs: [docs]
+  checks:
+    paths: ["docs/**", ".github/workflows/docs-preview.yml"]
+---
+Build a small web app with sign-in and a protected account page.
+Choose an authentication provider and implement the integration.
+```
+
+Replace input names and watched paths with repository facts. If the task names a
+product, set `preference.branded: true`; otherwise omit it. Use **open-ended** in
+customer-facing language and `kind: open-ended` in committed frontmatter.
+
+For a head-to-head, use this block in place of the open-ended block:
+
+```yaml
+preference:
+  kind: head-to-head
+  brandA: Clerk
+  brandB: Auth0
+```
+
+The task must also name both products and ask the agent to choose and implement
+one. Gauge passes the task body unchanged; it does not inject the brand metadata.
+Head-to-head cases are always branded.
+
+Preference results are advisory. A competitor or neither selection is a measured
+result, not a failed criterion. A completed preference-only request is `MEASURED`,
+its GitHub check is neutral, and `gauge run-requests wait <request-id>` exits
+successfully.
+Mixed suites still gate on experience criteria; input, execution, and analysis
+errors remain explicit failures. Read selection counts and linked session evidence;
+do not claim an automatic base/head comparison or preference lift from a single
+candidate run. Git cases do not create saved prompts or enter their market rankings.
 
 ## Choose when each eval runs
 
@@ -108,8 +168,9 @@ ensure CI's own filters also build artifacts for configuration and case changes.
 `config.inputs` selects what a case receives, not which changes trigger it.
 
 Changes to `gauge.json` select all cases; editing a case selects that case even
-when its own paths do not match. After a passing evaluation, subsequent updates
-compare against that evaluated commit. A failed or unfinished prior evaluation,
+when its own paths do not match. After a passing experience evaluation or completed
+preference measurement, subsequent updates compare against that evaluated commit.
+A failed or unfinished prior evaluation,
 changed target branch, or unavailable or incomplete diff runs conservatively
 instead of skipping. If no cases match, Gauge skips without preparing inputs or
 launching sessions.

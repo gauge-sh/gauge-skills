@@ -34,6 +34,8 @@ criteria:
       upstream PR, credentialed acceptance test, nested eval, or completed App
       installation is required.
 config:
+  checks:
+    paths: ["gauge-agents/**"]
   agents:
     - agent: OPENCODE
       models:

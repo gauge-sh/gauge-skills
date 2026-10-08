@@ -30,6 +30,13 @@ attached. Public repositories are pinned by full SHA in each case; their content
 are consumer fixtures, not repositories where this test should push a PR. No
 write credentials or nested eval launches are part of the tasks.
 
+Each case also watches `gauge-agents/**` through `config.checks.paths`. On eligible
+automatic updates, changes confined to `gauge-chat`, the root README, or these
+notes do not select the setup cases. A change to a case selects that case, and
+`gauge.json` changes select all cases. Failed or unfinished previous evaluations
+and unavailable comparisons run conservatively; explicit GitHub reruns select
+the full suite. Input selection alone does not make a case conditional.
+
 ## Fixture evidence
 
 These upstream files were inspected before authoring the criteria:
