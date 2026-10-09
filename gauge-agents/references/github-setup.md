@@ -27,16 +27,27 @@ wheels or sdists, but Gauge has no automatic Python package installer. Describe
 the required consumer-side installation and remaining verification explicitly;
 do not substitute a registry release for the candidate or invent input types.
 
-The Gauge GitHub App must be installed for the workspace and granted access to this
+For automatic PR checks, the Gauge GitHub App must be installed for the workspace and granted access to this
 repository, including newly selected repositories. Check that prerequisite when
 access is available; otherwise make the required installation/access step explicit.
 A local configuration file cannot grant App access. In Gauge’s Settings → GitHub,
 verify repository checks are enabled for the intended PR **base** branches. These
 controls are separate from `gauge.json` and GitHub branch protection.
 
+Fork PRs are disabled by default. To allow them, check **Allow fork pull requests** in
+the repository's Gauge settings. A workspace member follows the GitHub check's
+link, signs in, and explicitly authorizes that revision. Approval uses workspace
+credits and configured connections. New revisions and explicit reruns require
+fresh approval. GitHub repository permissions alone do not grant Gauge access.
+Input readiness remains determined by `inputs`; approval does not replace CI.
+
+If the App cannot be installed, or the user wants their CI to control launches,
+use [local inputs](#run-from-ci-or-local-builds). Do not add an App dependency to
+a workflow that supplies all inputs locally and uses public consumer repositories.
+
 ## Author `gauge.json`
 
-The v2 format uses root `org` to enable same-repository PR checks. It has no
+The v2 format uses root `org` to select the workspace for PR checks. It has no
 `github.enabled` switch, build recipe, or root workflow setting. Preserve existing
 inputs and cases. This example shows shapes; choose only relevant inputs and replace
 all example values with repository facts:
@@ -76,15 +87,16 @@ package inside it. Select exactly one `.tgz`. Omit the artifact name only if the
 workflow produces exactly one artifact. A Git Skill path names the directory,
 not the `SKILL.md` file; use `"."` for a root Skill.
 
-Use the published v2.6.0 schemas for accepted fields and enum values:
+Use the v2.7.0 schemas for accepted fields and enum values:
 
-- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.6.0/gauge.json)
-- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.6.0/case.json)
+- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.7.0/gauge.json)
+- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.7.0/case.json)
 
 Associate the schemas in an editor or validate against them externally; do not
 add `$schema` to `gauge.json`, whose runtime schema is strict. Use current CLI help and the
 published schemas if repository examples disagree with these shapes. The schema
-release is v2.6.0; the configuration's `version` remains `2`.
+release is v2.7.0; the configuration's `version` remains `2`. With CLI 0.18.0
+or later, omitting an input's `source` defaults to Git.
 
 ## Choose experience criteria or preference measurement
 
@@ -189,9 +201,8 @@ manager, lockfile, workspace dependencies, runtime, and build scripts.
 
 For npm packages, the resulting path must:
 
-- Run for the candidate PR revision. Checkout the PR head when compiling the
-  candidate, for example `${{ github.event.pull_request.head.sha || github.sha }}`,
-  instead of accidentally packaging GitHub's synthetic merge commit.
+- Build the PR using the repository's existing checkout settings. The default
+  `pull_request` merge checkout is supported; do not override it for Gauge.
 - Install dependencies and build the package before packing. Account for monorepo
   dependencies and generated files; a successful build in a developer's populated
   checkout does not prove a clean CI install works.
@@ -201,7 +212,7 @@ For npm packages, the resulting path must:
 - Keep artifact names and internal paths aligned with `gauge.json`, without
   requiring an npm publication or a Gauge API token in the workflow.
 
-Gauge waits for a successful eligible workflow at the candidate SHA. An unrelated
+Gauge tests the artifact uploaded by the PR's successful workflow. An unrelated
 revision, failed latest attempt, missing artifact, or expired artifact cannot prove
 that this candidate is ready. Do not introduce privileged `pull_request_target`
 execution of untrusted PR code to obtain secrets.
@@ -225,7 +236,7 @@ input selects files from an uploaded artifact whose root contains `dist/`:
 }
 ```
 
-Build the exact PR head using the repository's toolchain, then upload already
+Build with the repository's toolchain and normal checkout, then upload already
 unpacked files using the same Actions artifact envelope as above. Match `paths`
 and each command's explicit relative path to the uploaded artifact layout, not
 just the build checkout. Include runtime companion files in the selection. Gauge
@@ -298,8 +309,8 @@ paid sessions. Review global and per-input checks: `no` is a definite problem;
 `unknown` is a specific static question it could not resolve. Exit 1 means a
 definite failure; exit 0 can still contain unknowns. Resolve failures and explain
 remaining unknowns. Zero cases is informational and valid for setup-only work.
-If the installed CLI lacks `verify`, update it while preserving the selected
-Skill (`GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli`).
+If the installed CLI lacks a required command or option, update it with
+`gauge update`. Updating the CLI does not change this Skill.
 
 Static verification checks config, case references, selected Git paths, and
 recognizable workflow declarations. It does not execute workflows or prove
@@ -311,8 +322,9 @@ in another app. Use these checks to catch missing bundled files or dependencies;
 report actual environment blockers rather than treating static success as proof
 of installation.
 
-If cases exist, `gauge evals plan` previews committed definitions without launching
-sessions. It reads Git HEAD, not uncommitted edits. Preserve the user's chosen
+If cases exist, `gauge evals plan` previews definitions without launching
+sessions. By default it reads Git HEAD; with `--input` it reads current files,
+including uncommitted edits. Preserve the user's chosen
 evaluation scope: setup-only requests can leave cases absent, and the App reports
 **No evals configured** as a skipped check without spending credits. The explicit
 CLI plan/run path still rejects an empty case selection; that is not evidence the
@@ -324,3 +336,37 @@ reviewable patch and name the missing external step. Report separately what loca
 validation, CI, and Gauge each proved. A skipped empty-state check verifies the App
 integration; artifact staging and agent execution remain unproven until a real eval
 uses those inputs. Launch paid evals only within the user's authorized scope.
+
+## Run from CI or local builds
+
+Use CLI **0.18.0 or later**. Keep input declarations in `gauge.json` and supply
+built output with repeatable `--input name=path` options. Skills accept directories
+with a root `SKILL.md` or ZIP/tar.gz archives; npm packages accept packed `.tgz`
+files; file and binary inputs accept directories. Configured paths are relative
+to the supplied directory. Use a dedicated output directory without symlinks.
+
+```sh
+gauge --org acme evals plan --input product=./dist/product.tgz
+gauge --org acme evals run --input product=./dist/product.tgz --yes -o json > request.json
+gauge --org acme run-requests wait "$(jq -er '.runRequestId' request.json)" -o json > results.json
+```
+
+Replace the workspace, input name, and path with real values. Set
+`GAUGE_API_TOKEN` as a CI secret. Use `--yes` only for authorized launches.
+With local inputs, current case/config files are used and no Git checkout is
+needed when every selected input is supplied locally. Other inputs retain their
+configured sources; private consumer repositories and website previews still
+need their configured access.
+
+`wait -o json` returns the aggregate verdict, per-session criteria, explanations,
+and session links after execution and judging settle. Failed evaluations exit
+nonzero and still write results JSON; retain it as a CI artifact even on failure.
+No GitHub comments or status checks are required. Disable automatic checks in
+Gauge's GitHub settings if the customer's CI owns the trigger.
+
+## Authenticated MCP access
+
+Connect the account in Gauge's MCP setup and use the resulting versioned reference
+in case `config.mcpRefs`. Complete OAuth in the browser when required. Credentials
+are managed by Gauge; never put tokens in the case prompt or repository. Keep
+prompts natural, such as “Use my connected account.”
