@@ -47,8 +47,11 @@ The config sets `org` to the Gauge organization (`gauge-x6af`).
 It selects only the candidate `gauge-agents` Skill and runs one Codex/GPT-6.1 Sol
 session per eligible PR update. Four additional public-repository cases cover
 Vite, GitHub CLI, FastAPI, and Astro docs, with one sample each on DeepSeek V4.1
-Flash and GLM 5.3 through OpenCode. The complete suite launches **nine sessions**
-per eligible update. See [eval coverage and interpretation](EVALS.md).
+Flash and GLM 5.3 through OpenCode. Two Agent Preference cases on the same
+OpenCode targets cover authoring a docs preference check and interpreting an
+existing preference result. The complete suite launches **thirteen sessions**;
+each case watches only the Skill files it exercises. See
+[eval coverage and interpretation](EVALS.md).
 
 The personas preserve setup-only scope and supply no remote write credentials,
 so the inner tasks produce local setup changes or actionable fallback handoffs
