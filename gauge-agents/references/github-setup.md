@@ -34,7 +34,7 @@ A local configuration file cannot grant App access. In Gauge’s Settings → Gi
 verify repository checks are enabled for the intended PR **base** branches. These
 controls are separate from `gauge.json` and GitHub branch protection.
 
-Fork PRs are disabled by default. To allow them, select **Require approval** in
+Fork PRs are disabled by default. To allow them, check **Allow fork pull requests** in
 the repository's Gauge settings. A workspace member follows the GitHub check's
 link, signs in, and explicitly authorizes that revision. Approval uses workspace
 credits and configured connections. New revisions and explicit reruns require
