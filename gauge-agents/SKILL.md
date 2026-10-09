@@ -10,11 +10,10 @@ description: Core instructions and guide to use the Gauge Agents product and CLI
 If `gauge` is not installed, install it with Node.js 22.12 or later:
 
 ```sh
-GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli
+npm install -g @withgauge/cli
 ```
 
-The Skill is already installed; skip the CLI’s automatic Skill installation to
-preserve this selected version and its references.
+The CLI and this Skill are installed separately.
 
 ## Load the instructions
 
@@ -28,11 +27,12 @@ Follow the returned instructions for setup and operation. They ship with the CLI
 
 ## Set up repository PR checks
 
-When asked to set up Gauge PR checks, author Git-based eval cases, or connect a repository, read
+When asked to set up Gauge PR checks, run evals from CI or local builds, author
+Git-based eval cases, or connect a repository, read
 [references/github-setup.md](references/github-setup.md). It covers choosing
 inputs for an npm package, native CLI, docs preview, or Skill, reusing the
-repository’s CI, authoring advisory Agent Preference cases, selecting relevant
-file changes, and verifying setup before committing.
+repository’s CI, authorizing fork evaluations, supplying local inputs, reading
+JSON results, and verifying setup before committing.
 
 ## What Gauge is
 
