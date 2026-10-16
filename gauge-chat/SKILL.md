@@ -17,7 +17,7 @@ If Gauge is not connected, use [the MCP setup guide](https://docs.withgauge.com/
 
 Resolve the organization and category before querying. For agency connections, discover the client organizations and use the intended client's scope. Read available company context, competitor context, content strategy, and writing guidance through the memory tools. Do not assume the MCP client already has the context used by Gauge's in-app agent.
 
-Use direct tools for specific data. Use `ask_gauge` for an analytical question that benefits from synthesis, including the client, category, dates, filters, and required evidence. Pass relevant context explicitly on follow-ups. Use dedicated write tools for changes; do not assume a request made to the analyst saved anything.
+Query the specific data tools and do the analysis yourself; the MCP has no analyst tool to delegate to. For AI bot and crawler traffic to the user's sites, use the AI traffic tools. For questions about Gauge itself (features, plans, billing), read the documentation with `fetch_docs_page`, starting from its `llms.txt` index. Use dedicated write tools for changes.
 
 ## Measure what models say
 
