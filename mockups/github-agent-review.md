@@ -1,41 +1,39 @@
-### Gauge · Agent experience review
+### Check CLI capabilities before starting setup
 
-**Good direction · 2 opportunities to make setup easier for agents**
+`Low severity` · Agent friction · [github-setup.md:201–208](https://github.com/gauge-sh/gauge-skills/blob/caa940ff5714da215f630c03257a89528348a434/gauge-agents/references/github-setup.md#L201-L208)
 
-This change gives agents a clear way to choose the right product input, reuse existing CI, and verify their work. Preserving the selected Skill during CLI installation also prevents setup from replacing the instructions being evaluated.
+The upgrade check comes **after** the configuration and CI instructions. Agents with an older CLI can reach final verification before discovering that the required command is missing.
 
-Two places could still leave agents with extra work or an incomplete handoff:
+```markdown
+Before committing, run `gauge evals verify -o json`.
+...
+If the installed CLI lacks `verify`, update it while preserving the selected
+Skill (`GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli`).
+```
 
-#### 1. Make the Python fallback actionable
+**Sample evidence** · Earlier Astro sessions, recorded in [this PR’s EVALS.md:86–95](https://github.com/gauge-sh/gauge-skills/blob/caa940ff5714da215f630c03257a89528348a434/EVALS.md#L86-L95):
 
-[Python package guidance](https://github.com/gauge-sh/gauge-skills/blob/caa940ff5714da215f630c03257a89528348a434/gauge-agents/references/github-setup.md#inspect-and-choose-the-input) explains that files can deliver a wheel but will not install it. Unlike the npm and native CLI paths, it has no worked example connecting delivery to use in a consumer application.
+| Agent | Recorded behavior |
+| :--- | :--- |
+| [DeepSeek](https://agents.withgauge.com/gauge-x6af/runs/cmuxh5muq000n0iuqzzp0sjs5) · [GLM](https://agents.withgauge.com/gauge-x6af/runs/cmuxh5muq000o0iuq51jdpqu9) | CLI 0.14.0 lacked `verify`; both used external schema/regex validation. |
 
-**Why it matters:** An agent could produce a valid file input and still leave the user unable to test the candidate package.
+**Suggested fix** · Add a preflight before “Inspect and choose the input”:
 
-**Suggested change:** Add a short wheel example showing how to locate the staged candidate, install it in the consumer environment, and verify that the import resolves to that installation. Mark the installation step as manual; keep the remaining activation steps explicit.
-
-#### 2. Check CLI capabilities before authoring configuration
-
-[Verification guidance](https://github.com/gauge-sh/gauge-skills/blob/caa940ff5714da215f630c03257a89528348a434/gauge-agents/references/github-setup.md#verify-and-hand-off) handles a CLI without `evals verify`, but only after the configuration and CI instructions.
-
-**Why it matters:** An agent with an older CLI may follow incompatible help or discover the missing command after writing its patch.
-
-**Suggested change:** Move the capability check to the start of setup. If an upgrade is needed, preserve the selected Skill, reload CLI instructions, then choose the input and write configuration.
-
----
-
-**Configured evals · ✅ 9/9 sessions passed**
-
-The existing suite covers CLI setup, Vite, GitHub CLI, FastAPI, and Astro docs. Passing those cases supports the tested workflows; the review above identifies opportunities beyond their pass/fail criteria.
+```diff
++ Check that `gauge evals verify --help` is available before setup.
++ If missing, upgrade while preserving the selected Skill, then reload
++ `gauge instructions`. If still unavailable, report the blocker.
+```
 
 <details>
-<summary>Eval evidence and review scope</summary>
+<summary>Evidence context</summary>
 
-- [Existing results from PR #2](https://github.com/gauge-sh/gauge-skills/pull/2#issuecomment-6005590376): 27/27 criterion verdicts passed at `caa940ff5714`.
-- One sample per configured case/model combination. No new sessions were run for this preview.
-- Suggestions come from reading the changed Skill and setup reference. Their effects on agent behavior have not been measured.
-- In the proposed app, teams could keep selected configured evals as required checks alongside the broader review. This mock-up does not change branch protection.
+These sessions predate the latest run; their failures were attributed to rubric wording, not this friction. Moving the check earlier is a review suggestion, not a measured improvement.
 
 </details>
 
-<sub>Concept preview · Sample review of PR #2, prepared for design-partner feedback. This is a proposed GitHub App experience, not a live automated review.</sub>
+---
+
+✅ **Configured evals: 9/9 passed** · [Latest results](https://github.com/gauge-sh/gauge-skills/pull/2#issuecomment-6005590376)
+
+<sub>Gauge review concept · Based on PR #2 · No new sessions run</sub>
