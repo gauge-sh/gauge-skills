@@ -30,7 +30,9 @@ Each skill can also be installed independently by passing only its name.
 ## Example requests
 
 - “Set up Gauge PR checks for this repo.”
-- “Use Gauge Agents to find where coding agents struggle with our onboarding.”
+- “Test whether a coding agent can use our SDK to complete its first integration.”
+- “Run an evaluation to find where coding agents struggle with our onboarding.”
+- “Measure whether our updated docs improve agent success.”
 - “Use Gauge Agents to compare which email tools agents select and why.”
 - “Use Gauge Chat to explain why our competitors appear in answers where we don't.”
 - “Use Gauge Chat to draft an update to the page most likely to improve our AI visibility.”
