@@ -52,6 +52,10 @@ Vite, GitHub CLI, FastAPI, and Astro docs, with one sample each on DeepSeek V4.1
 Flash and GLM 5.3 through OpenCode. The complete suite launches **nine sessions**
 per eligible update. See [eval coverage and interpretation](EVALS.md).
 
+`gauge.json` limits automatic case discovery to `gauge-evals/pr-setup-*.md`.
+The cases in `gauge-evals/discoverability/` are manual-only; select them explicitly
+with `--files gauge-evals/discoverability/*.md` when running a discovery pilot.
+
 The personas preserve setup-only scope and supply no remote write credentials,
 so the inner tasks produce local setup changes or actionable fallback handoffs
 without launching nested evals. In that organization's
