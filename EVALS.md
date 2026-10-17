@@ -37,6 +37,30 @@ notes do not select the setup cases. A change to a case selects that case, and
 and unavailable comparisons run conservatively; explicit GitHub reruns select
 the full suite. Input selection alone does not make a case conditional.
 
+## Agent Preference cases
+
+These cases leave PR setup to the cases above and test the rest of the
+`gauge-agents` Skill: designing a preference measurement and reading one.
+
+| Case | Starting point | What it tests | Watches |
+| --- | --- | --- | --- |
+| [Docs preference measurement](gauge-evals/preference-docs-measurement.md) | `gauge-sh/learn-with-gauge` at `0db0d43`, which already declares a `website` docs input and no cases | Authoring one committed preference case: open-ended versus head-to-head, `branded`, a non-leading task, reuse of the existing docs input, relevant path filters, `gauge evals verify`, and an advisory-results handoff without launches | `gauge-agents/SKILL.md`, `gauge-agents/references/github-setup.md` |
+| [Preference result analysis](gauge-evals/preference-result-analysis.md) | No repository; the `gauge` connection supplies `GAUGE_API_TOKEN` for `gauge-x6af` | Reading the run history of "ALG web study 2026-09-27: comparison" (Braintrust vs Gauge, head-to-head), explaining the Braintrust wins from verdict evidence, and recommending calibrated docs changes, read-only | `gauge-agents/SKILL.md` |
+
+Each runs one sample on the two OpenCode targets: four sessions. Both use
+dedicated personas (`cmv0i6sq4000301m5h3zqxmiw` and `cmv0i6t87000401joltvpomu2`);
+the PR-setup personas tell the simulated user to refuse nested eval cases, which
+is the docs case's task.
+
+The analysis case depends on workspace data. When it was written the prompt had
+nine completed runs: Gauge won seven, both Braintrust wins were Claude Code
+Sonnet 5, and Codex chose Gauge in all three of its runs. The losing verdicts
+cite Gauge as account-gated and less methodologically clear than Braintrust's
+versioned before/after comparisons. The rubric judges against current CLI output
+if more runs are added, but new runs change what a correct answer says; prefer
+leaving this prompt's history alone. The connection's token is a full API token,
+so read-only behavior is enforced by the rubric, not by permissions.
+
 ## Fixture evidence
 
 These upstream files were inspected before authoring the criteria:
