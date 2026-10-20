@@ -26,24 +26,6 @@ gauge instructions
 
 Follow the returned instructions for setup and operation. They ship with the CLI and are the source of truth for agent workflows. Use `gauge instructions <topic>` to reload a specific topic and `gauge <command> --help` for flags.
 
-## Choose storage and execution independently
-
-`gauge init` initializes a workspace without requiring Git. Saved eval sets and
-preference prompts live in `.gauge/gauge.sqlite` locally or in your hosted
-organization. Use `gauge eval` and `gauge preference` for ongoing measurements;
-shared, fully specified cases optionally live in `gauge-cases/`.
-
-`gauge.json` contains shared inputs and automation settings. Private workspace
-preferences choose local or hosted execution; login does not change that choice.
-Interactive CLI launches snapshot working-tree definitions in either backend.
-GitHub checks use committed sources.
-
-For local sessions, your coding agent performs the analysis. Read
-`gauge instructions session-analysis --local` and `gauge run analysis schema`,
-then publish judgments and Findings with `gauge run analysis save`. Read insights
-with `gauge run insight`. Both query backends support Findings; discover supported
-fields with `gauge query fields --dataset findings` for the selected backend.
-
 ## Set up repository PR checks
 
 When asked to set up Gauge PR checks, author Git-based eval cases, or connect a repository, read
