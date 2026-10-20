@@ -7,13 +7,13 @@ description: Test how coding agents discover and use your product. Use when aske
 
 ## Install the CLI
 
-If `gauge` is not installed, install it with Node.js 22.12 or later:
+If `gauge` is not installed, install it with Node.js 22.13 or later:
 
 ```sh
 GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli
 ```
 
-The Skill is already installed; skip the CLI’s automatic Skill installation to
+This Skill is already installed. CLI setup and skill installation are separate;
 preserve this selected version and its references.
 
 ## Load the instructions

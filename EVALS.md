@@ -11,11 +11,11 @@ evidence of a pass-rate improvement.
 
 | Case | Starting repository | What it tests |
 | --- | --- | --- |
-| [Existing CLI](gauge-evals/pr-setup-cli.md) | `gauge-sh/alg`, before Gauge setup | Existing supported npm CLI regression; one Codex/GPT-6.1 Sol sample. |
-| [Vite](gauge-evals/pr-setup-vite.md) | `vitejs/vite` | Supported pnpm monorepo; select the consumer package, build it, and make a candidate tarball available to another app. Avoid mistaking pkg-pr-new publication for an Actions artifact. |
-| [GitHub CLI](gauge-evals/pr-setup-github-cli.md) | `cli/cli` | Build and deliver the candidate Linux x86-64 executable through a supported input, with matching artifact paths and a usable command. |
-| [FastAPI](gauge-evals/pr-setup-fastapi.md) | `fastapi/fastapi` | Python wheel/sdist consumer delivery; distinguish file transport from automatic Python installation. |
-| [Astro docs](gauge-evals/pr-setup-astro-docs.md) | `withastro/docs` | Reuse the existing Cloudflare preview comment to discover the ready candidate and route the canonical docs origin to it. |
+| [Existing CLI](gauge-cases/pr-setup-cli.md) | `gauge-sh/alg`, before Gauge setup | Existing supported npm CLI regression; one Codex/GPT-6.1 Sol sample. |
+| [Vite](gauge-cases/pr-setup-vite.md) | `vitejs/vite` | Supported pnpm monorepo; select the consumer package, build it, and make a candidate tarball available to another app. Avoid mistaking pkg-pr-new publication for an Actions artifact. |
+| [GitHub CLI](gauge-cases/pr-setup-github-cli.md) | `cli/cli` | Build and deliver the candidate Linux x86-64 executable through a supported input, with matching artifact paths and a usable command. |
+| [FastAPI](gauge-cases/pr-setup-fastapi.md) | `fastapi/fastapi` | Python wheel/sdist consumer delivery; distinguish file transport from automatic Python installation. |
+| [Astro docs](gauge-cases/pr-setup-astro-docs.md) | `withastro/docs` | Reuse the existing Cloudflare preview comment to discover the ready candidate and route the canonical docs origin to it. |
 
 The four public-repository cases each run **one sample on two OpenCode targets**:
 `accounts/fireworks/models/deepseek-v4p1-flash` and `z-ai/glm-5.3`.
@@ -69,7 +69,7 @@ explicit consumer-side steps or an actionable handoff for missing support. None
 of the cases accepts invented Gauge fields, silent substitution of a release,
 or calling a docs-source test equivalent to testing the requested product surface.
 
-`gauge evals verify` provides offline working-tree evidence, not proof of actual
+`gauge run --verify` provides offline working-tree evidence, not proof of actual
 CI output, live delivery, sandbox execution, or account activation. Judge the
 agent's feasible validation and accurate handoff; unavailable external access is
 not itself a setup failure. Preserve the distinction between a local setup patch
@@ -99,7 +99,7 @@ final responses did not repeat the public-origin/live-not-snapshot caveats.
 Evidence: [DeepSeek session](https://agents.withgauge.com/gauge-x6af/runs/cmuxh5muq000n0iuqzzp0sjs5)
 and [GLM session](https://agents.withgauge.com/gauge-x6af/runs/cmuxh5muq000o0iuq51jdpqu9).
 Both sessions installed CLI 0.14.0, then the latest release, and used external
-schema/regex validation because `gauge evals verify` was unavailable.
+schema/regex validation because `gauge run --verify` was unavailable.
 
 The revised rendered-docs criterion keeps the functional requirements and
 rejects unsupported previews, false snapshot claims, and undisclosed blockers.
@@ -115,7 +115,7 @@ measurement, not evidence of Skill improvement. Preserve the earlier results
 rather than retroactively regrading them to establish a better baseline.
 
 Before pushing an eligible update or explicitly rerunning this suite, confirm the
-rollout is ready: the CLI customers install exposes `gauge evals verify`, the
+rollout is ready: the CLI customers install exposes `gauge run --verify`, the
 published v2.4.0 schemas are available, and the control plane and execution path
 support binary inputs and public previews. The candidate Skill must remain
 selected when the CLI installs. Separately confirm the native-question answer
@@ -137,6 +137,6 @@ repeat consequential differences before claiming improvement. Keep the existing
 nine-session regression roster separate from any additionally authorized
 comparison or confirmation runs.
 
-Case notes live here rather than under `gauge-evals/`: the default discovery glob
+Case notes live here rather than under `gauge-cases/`: the default discovery glob
 would otherwise interpret a README there as an eval case. The cases' criteria
 and these notes are not staged into the consumer fixture as Skill instructions.
