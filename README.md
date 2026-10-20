@@ -44,7 +44,7 @@ and `gauge-chat`. Each selects its own directory and root `SKILL.md` at the
 candidate commit. No build or artifact-upload workflow is required.
 
 The config sets `org` to the Gauge organization (`gauge-x6af`).
-[`gauge-evals/pr-setup-cli.md`](gauge-evals/pr-setup-cli.md) tests the request
+[`gauge-cases/pr-setup-cli.md`](gauge-cases/pr-setup-cli.md) tests the request
 “Set up Gauge PR checks for this repo” against a pinned pre-setup CLI checkout.
 It selects only the candidate `gauge-agents` Skill and runs one Codex/GPT-6.1 Sol
 session per eligible PR update. Four additional public-repository cases cover
@@ -52,9 +52,9 @@ Vite, GitHub CLI, FastAPI, and Astro docs, with one sample each on DeepSeek V4.1
 Flash and GLM 5.3 through OpenCode. The complete suite launches **nine sessions**
 per eligible update. See [eval coverage and interpretation](EVALS.md).
 
-`gauge.json` limits automatic case discovery to `gauge-evals/pr-setup-*.md`.
-The cases in `gauge-evals/discoverability/` are manual-only; select them explicitly
-with `--files gauge-evals/discoverability/*.md` when running a discovery pilot.
+`gauge.json` limits automatic case discovery to `gauge-cases/pr-setup-*.md`.
+The cases in `gauge-cases/discoverability/` are manual-only; select them explicitly
+with `--files gauge-cases/discoverability/*.md` when running a discovery pilot.
 
 The personas preserve setup-only scope and supply no remote write credentials,
 so the inner tasks produce local setup changes or actionable fallback handoffs

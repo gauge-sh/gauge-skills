@@ -7,13 +7,13 @@ description: Test how coding agents discover and use your product. Use when aske
 
 ## Install the CLI
 
-If `gauge` is not installed, install it with Node.js 22.12 or later:
+If `gauge` is not installed, install it with Node.js 22.13 or later:
 
 ```sh
 GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli
 ```
 
-The Skill is already installed; skip the CLI’s automatic Skill installation to
+This Skill is already installed. CLI setup and skill installation are separate;
 preserve this selected version and its references.
 
 ## Load the instructions
@@ -25,6 +25,24 @@ gauge instructions
 ```
 
 Follow the returned instructions for setup and operation. They ship with the CLI and are the source of truth for agent workflows. Use `gauge instructions <topic>` to reload a specific topic and `gauge <command> --help` for flags.
+
+## Choose storage and execution independently
+
+`gauge init` initializes a workspace without requiring Git. Saved eval sets and
+preference prompts live in `.gauge/gauge.sqlite` locally or in your hosted
+organization. Use `gauge eval` and `gauge preference` for ongoing measurements;
+shared, fully specified cases optionally live in `gauge-cases/`.
+
+`gauge.json` contains shared inputs and automation settings. Private workspace
+preferences choose local or hosted execution; login does not change that choice.
+Interactive CLI launches snapshot working-tree definitions in either backend.
+GitHub checks use committed sources.
+
+For local sessions, your coding agent performs the analysis. Read
+`gauge instructions session-analysis --local` and `gauge run analysis schema`,
+then publish judgments and Findings with `gauge run analysis save`. Read insights
+with `gauge run insight`. Both query backends support Findings; discover supported
+fields with `gauge query fields --dataset findings` for the selected backend.
 
 ## Set up repository PR checks
 

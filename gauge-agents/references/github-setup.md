@@ -34,6 +34,12 @@ A local configuration file cannot grant App access. In Gauge’s Settings → Gi
 verify repository checks are enabled for the intended PR **base** branches. These
 controls are separate from `gauge.json` and GitHub branch protection.
 
+The shared manifest and case files do not choose an interactive execution backend.
+That preference belongs in ignored `.gauge/config.json`. `gauge init --cases` can
+scaffold shared cases; plain `gauge init` creates only workspace configuration and
+private local state. Saved EvalSets and preference Prompts are independent ongoing
+measurements and are not required for GitHub cases.
+
 ## Author `gauge.json`
 
 The v2 format uses root `org` to enable same-repository PR checks. It has no
@@ -76,31 +82,24 @@ package inside it. Select exactly one `.tgz`. Omit the artifact name only if the
 workflow produces exactly one artifact. A Git Skill path names the directory,
 not the `SKILL.md` file; use `"."` for a root Skill.
 
-Use the published v2.6.0 schemas for accepted fields and enum values:
+Use the published v2.7.0 schemas for accepted fields and enum values:
 
-- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.6.0/gauge.json)
-- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.6.0/case.json)
+- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.7.0/gauge.json)
+- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.7.0/case.json)
 
 Associate the schemas in an editor or validate against them externally; do not
 add `$schema` to `gauge.json`, whose runtime schema is strict. Use current CLI help and the
 published schemas if repository examples disagree with these shapes. The schema
-release is v2.6.0; the configuration's `version` remains `2`.
+release is v2.7.0; the configuration's `version` remains `2`.
 
 ## Choose experience criteria or preference measurement
 
-Each case under `gauge-evals/` declares exactly one of `criteria` or `preference`.
+Each case under `gauge-cases/` declares exactly one of `criteria` or `preference`.
 Use criteria for observable success/failure; use preference to measure which
 product the agent selects, using the same analysis as preference prompts in the
 app. Keep one case per scenario and the usual `config` fields for agents, models,
 samples, inputs, repository, and persona. Do not create saved prompts or add
 markets, schedules, thresholds, or comparison policies to Git case frontmatter.
-
-Preference frontmatter requires a CLI release with Git-authored Agent Preference
-support and the v2.6.0 schema; CLI 0.16.0 and earlier reject it. Check installed
-instructions/help and the published schema before authoring preference cases.
-If unavailable, explain the release prerequisite rather than replacing the
-measurement with pass/fail criteria. Existing experience cases and per-case
-path filters remain supported by CLI 0.16.0 and the v2.5.0 schemas.
 
 For an open-ended choice:
 
@@ -139,7 +138,7 @@ Head-to-head cases are always branded.
 
 Preference results are advisory. A competitor or neither selection is a measured
 result, not a failed criterion. A completed preference-only request is `MEASURED`,
-its GitHub check is neutral, and `gauge run-requests wait <request-id>` exits
+its GitHub check is neutral, and `gauge run wait <request-id> --check` exits
 successfully.
 Mixed suites still gate on experience criteria; input, execution, and analysis
 errors remain explicit failures. Read selection counts and linked session evidence;
@@ -149,8 +148,7 @@ candidate run. Git cases do not create saved prompts or enter their market ranki
 ## Choose when each eval runs
 
 The optional `checks.paths` in root `gauge.json` gates the whole suite. To run
-an individual eval only for relevant file changes, use CLI **0.16.0 or later**
-and add `config.checks.paths` to that case's Markdown frontmatter. For example,
+an individual case only for relevant file changes, add `config.checks.paths` to that case's Markdown frontmatter. For example,
 merge this fragment into the case's existing `config`, preserving its agents,
 inputs, and other settings:
 
@@ -177,8 +175,8 @@ launching sessions.
 
 Explicit GitHub reruns bypass both path filters and select the full suite, while
 still honoring repository access and target-branch settings. Manual CLI
-`gauge evals plan` and `gauge evals run` do not apply these automatic filters;
-`gauge evals verify` validates all discovered cases locally.
+`gauge run --dry-run` and `gauge run` do not apply these automatic filters;
+`gauge run --verify` validates all discovered cases locally.
 
 ## Reuse candidate CI
 
@@ -189,9 +187,9 @@ manager, lockfile, workspace dependencies, runtime, and build scripts.
 
 For npm packages, the resulting path must:
 
-- Run for the candidate PR revision. Checkout the PR head when compiling the
-  candidate, for example `${{ github.event.pull_request.head.sha || github.sha }}`,
-  instead of accidentally packaging GitHub's synthetic merge commit.
+- Run for the candidate PR revision. Preserve the repository's existing checkout
+  settings, including the default pull-request merge checkout. Gauge uses the
+  successful candidate workflow as its artifact source.
 - Install dependencies and build the package before packing. Account for monorepo
   dependencies and generated files; a successful build in a developer's populated
   checkout does not prove a clean CI install works.
@@ -225,7 +223,7 @@ input selects files from an uploaded artifact whose root contains `dist/`:
 }
 ```
 
-Build the exact PR head using the repository's toolchain, then upload already
+Build the candidate using the repository's toolchain, then upload already
 unpacked files using the same Actions artifact envelope as above. Match `paths`
 and each command's explicit relative path to the uploaded artifact layout, not
 just the build checkout. Include runtime companion files in the selection. Gauge
@@ -292,7 +290,7 @@ provider token is needed when existing candidate-specific evidence is usable.
 
 ## Verify and hand off
 
-Before committing, run `gauge evals verify -o json`. It reads the working tree,
+Before committing, run `gauge run --verify -o json`. It reads the working tree,
 including non-ignored untracked files, without login, network access, a PR, or
 paid sessions. Review global and per-input checks: `no` is a definite problem;
 `unknown` is a specific static question it could not resolve. Exit 1 means a
@@ -311,8 +309,10 @@ in another app. Use these checks to catch missing bundled files or dependencies;
 report actual environment blockers rather than treating static success as proof
 of installation.
 
-If cases exist, `gauge evals plan` previews committed definitions without launching
-sessions. It reads Git HEAD, not uncommitted edits. Preserve the user's chosen
+If cases exist, `gauge run --dry-run` previews current working-tree definitions
+without launching sessions. Interactive CLI runs snapshot these definitions and
+selected filesystem inputs in both backends; explicit remote artifacts retain
+their declared source. GitHub checks fetch committed sources. Preserve the user's chosen
 evaluation scope: setup-only requests can leave cases absent, and the App reports
 **No evals configured** as a skipped check without spending credits. The explicit
 CLI plan/run path still rejects an empty case selection; that is not evidence the
