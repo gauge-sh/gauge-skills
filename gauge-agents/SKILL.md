@@ -7,14 +7,16 @@ description: Test how coding agents discover and use your product. Use when aske
 
 ## Install the CLI
 
-If `gauge` is not installed, install it with Node.js 22.12 or later:
+Check `gauge --version`. If it is missing, install it with Node.js 22.13 or later:
 
 ```sh
-GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli
+npm install -g @withgauge/cli
 ```
 
-The Skill is already installed; skip the CLI’s automatic Skill installation to
-preserve this selected version and its references.
+This skill is already installed. When `gauge instructions` or `gauge init`
+recommends `gauge install-skill`, skip it so this copy stays in use.
+
+If the user asks for a specific CLI version, install `@withgauge/cli@<version>`.
 
 ## Load the instructions
 
@@ -26,9 +28,37 @@ gauge instructions
 
 Follow the returned instructions for setup and operation. They ship with the CLI and are the source of truth for agent workflows. Use `gauge instructions <topic>` to reload a specific topic and `gauge <command> --help` for flags.
 
+Choose guidance for the user's task:
+
+| Task | Read |
+| --- | --- |
+| First pilot or improving a product, skill, or docs | `gauge instructions hillclimb` |
+| Workspace and local/hosted selection | `gauge instructions init` |
+| Save a reusable task-success evaluation | `gauge instructions eval` |
+| Save a product-choice measurement | `gauge instructions preference` |
+| Inputs, shared case files, previews, and launches | `gauge instructions run` |
+| Read evidence and compare results | `gauge instructions session-analysis` |
+
+Local is the default, independently of login or a configured organization. Use
+the intended `--local` or `--hosted` mode when reading guidance and running commands.
+Local measurement authoring needs neither Docker nor a Gauge account; execution
+needs Docker, the runtime image, and agent credentials. Preserve `.gauge/`: its
+SQLite database contains saved measurements and history.
+
+For ongoing local work, save an eval or preference and rerun its ID with the
+selected inputs. Use `gauge-cases/` for shared or automated cases. The tested agent
+receives only its prompt, selected inputs, and configured consumer repository;
+it does not inherit the author's checkout. Preview exactly what each input will
+deliver before launching. Keep task, criteria, model, and fixtures fixed when testing a skill change.
+
+For replacing HTTPS documentation during a local test, read
+[references/web-fixtures.md](references/web-fixtures.md) for a complete fixture
+example. A `web-fixture` supports local canonical-URL replacement; a `website`
+input resolves GitHub deployment previews and requires hosted execution.
+
 ## Set up repository PR checks
 
-When asked to set up Gauge PR checks, author Git-based eval cases, or connect a repository, read
+When asked to set up Gauge PR checks or connect a repository, read
 [references/github-setup.md](references/github-setup.md). It covers choosing
 inputs for an npm package, native CLI, docs preview, or Skill, reusing the
 repository’s CI, authoring advisory Agent Preference cases, selecting relevant

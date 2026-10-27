@@ -16,8 +16,9 @@ criteria:
       The patch connects a build and packed candidate npm package to a matching
       Gauge Actions input. It respects the repository's pnpm toolchain and
       package build requirements, selects an unambiguous artifact and tarball,
-      and arranges to build the PR head rather than silently using a synthetic
-      merge or released version. Existing pkg-pr-new preview publication alone
+      and builds the candidate PR revision rather than a released version.
+      Keeping the workflow's existing checkout settings, including GitHub's
+      default merge checkout, is correct. Existing pkg-pr-new preview publication alone
       is not an uploaded Actions artifact. Reusing suitable CI or adding a
       focused packaging job are both acceptable; the path must work for relevant
       same-repository PR updates without depending on an unexplained preview

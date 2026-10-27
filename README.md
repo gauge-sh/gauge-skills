@@ -43,7 +43,8 @@ Each skill can also be installed independently by passing only its name.
 and `gauge-chat`. Each selects its own directory and root `SKILL.md` at the
 candidate commit. No build or artifact-upload workflow is required.
 
-The config sets `org` to the Gauge organization (`gauge-x6af`).
+The config records the Gauge organization (`gauge`) as `orgId`, set with
+`gauge orgs use gauge --project`.
 [`gauge-evals/pr-setup-cli.md`](gauge-evals/pr-setup-cli.md) tests the request
 “Set up Gauge PR checks for this repo” against a pinned pre-setup CLI checkout.
 It selects only the candidate `gauge-agents` Skill and runs one Codex/GPT-6.1 Sol

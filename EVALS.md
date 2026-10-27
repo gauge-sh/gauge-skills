@@ -1,5 +1,31 @@
 # PR setup evals
 
+## CLI 0.25.0 update (2026-10-27)
+
+The skill still referred to `gauge evals` and `gauge run-requests`, which CLI
+0.25.0 removed. A manual pilot ran three tasks against the published CLI 0.25.0,
+once with the previous skill and once with the revised one: saving a reusable
+local eval, replacing a docs page at its canonical URL with a local web fixture,
+and setting up PR checks for a small npm CLI. All 7 sessions passed (one session
+per task and variant, plus one follow-up), so this shows reduced friction, not a
+change in pass rate.
+
+- PR setup: the previous skill sent the agent to `gauge evals verify`; it hit an
+  unknown-command error and searched CLI internals before finding
+  `gauge run --verify`. With the revised skill it went straight to the current
+  commands and used fewer tool calls (48 versus 67).
+- Web fixtures: agents searched the CLI bundle for the fixture format until the
+  skill gained a complete example (`references/web-fixtures.md`). With the
+  example, the session used 23 tool calls versus 36 and searched nothing.
+- Local evals passed with both versions.
+
+Remaining gaps: a compact example of a criteria case, organization selection
+(now documented as `orgId` through `gauge orgs use <slug> --project`), and
+clearer guidance on agent model names and artifact upload formats. The pilot
+cases are not part of the automatic PR suite below.
+
+## Existing PR suite
+
 The learning goal is to find where the candidate `gauge-agents` Skill fails to
 help an agent set up a realistic repository, recognize a support boundary, or
 offer a useful alternative. The setup reference and the GitHub CLI/Astro criteria
@@ -75,7 +101,7 @@ agent's feasible validation and accurate handoff; unavailable external access is
 not itself a setup failure. Preserve the distinction between a local setup patch
 and end-to-end execution with that patch.
 
-The shared public-fixture persona supplies only the workspace (`gauge-x6af`),
+The shared public-fixture persona supplies only the organization (`gauge`),
 local-experiment authorization, and scope/access facts. It does not supply a
 support verdict or solution. The prompts identify the desired product surface
 without revealing the expected implementation or limitation. The existing
