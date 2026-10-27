@@ -13,14 +13,10 @@ Check `gauge --version`. If it is missing, install it with Node.js 22.13 or late
 npm install -g @withgauge/cli
 ```
 
-The Skill is already installed. When `gauge instructions` or `gauge init`
-recommends `gauge install-skill`, skip it to preserve this selected version and
-its references.
+This skill is already installed. When `gauge instructions` or `gauge init`
+recommends `gauge install-skill`, skip it so this copy stays in use.
 
-Honor a requested CLI version by installing `@withgauge/cli@<version>` from npm.
-A locally built package can report the same version as a release; for release
-qualification, compare the installed package with the published tarball or reinstall
-the exact registry version. Keep that version fixed across baseline and candidate runs.
+If the user asks for a specific CLI version, install `@withgauge/cli@<version>`.
 
 ## Load the instructions
 
@@ -52,8 +48,8 @@ SQLite database contains saved measurements and history.
 For ongoing local work, save an eval or preference and rerun its ID with the
 selected inputs. Use `gauge-cases/` for shared or automated cases. The tested agent
 receives only its prompt, selected inputs, and configured consumer repository;
-it does not inherit the author's checkout. Preview the selected bytes before
-launching. Keep task, criteria, model, and fixtures fixed when testing a skill change.
+it does not inherit the author's checkout. Preview exactly what each input will
+deliver before launching. Keep task, criteria, model, and fixtures fixed when testing a skill change.
 
 For replacing HTTPS documentation during a local test, read
 [references/web-fixtures.md](references/web-fixtures.md) for a complete fixture

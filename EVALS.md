@@ -1,133 +1,28 @@
 # PR setup evals
 
-## Manual CLI 0.25.0 skill pilot (2026-10-27)
+## CLI 0.25.0 update (2026-10-27)
 
-This pilot tests the published CLI with the skill from `37c96ef`, then changes only
-the skill. It is separate from the automatic PR suite below. The installed CLI
-initially reported 0.25.0 but differed from npm's release. After reinstalling
-`@withgauge/cli@0.25.0` from the public registry, all 17 package files matched the
-downloaded tarball. The same verified tarball was attached to every session.
+The skill still referred to `gauge evals` and `gauge run-requests`, which CLI
+0.25.0 removed. A manual pilot ran three tasks against the published CLI 0.25.0,
+once with the previous skill and once with the revised one: saving a reusable
+local eval, replacing a docs page at its canonical URL with a local web fixture,
+and setting up PR checks for a small npm CLI. All 7 sessions passed (one session
+per task and variant, plus one follow-up), so this shows reduced friction, not a
+change in pass rate.
 
-The three cases in `gauge-cases/cli-025/` cover a saved local eval, a local
-canonical-URL web fixture, and a small npm CLI's PR-check setup. Each requests
-setup and feasible validation, with no nested session launches. Local cases use
-OpenCode / DeepSeek V4.1 Flash; PR setup uses OpenCode / GLM 5.3. Each has one
-sample per skill variant. These are exploratory observations, not a pass-rate
-estimate or broad model comparison. They do not test Gauge Chat or live nested
-Docker execution, GitHub activation, or a real PR's artifact delivery.
+- PR setup: the previous skill sent the agent to `gauge evals verify`; it hit an
+  unknown-command error and searched CLI internals before finding
+  `gauge run --verify`. With the revised skill it went straight to the current
+  commands and used fewer tool calls (48 versus 67).
+- Web fixtures: agents searched the CLI bundle for the fixture format until the
+  skill gained a complete example (`references/web-fixtures.md`). With the
+  example, the session used 23 tool calls versus 36 and searched nothing.
+- Local evals passed with both versions.
 
-Reproduce in a new directory outside a Git checkout:
-
-```sh
-python3 scripts/prepare-cli-pilot.py /path/to/new-pilot
-cd /path/to/new-pilot
-gauge run --verify --hosted -o json
-gauge run --dry-run --hosted --org <your-org> -o json
-# When session spending is authorized:
-gauge run --hosted --org <your-org> --yes -o json
-gauge run wait <request-id> --hosted --org <your-org> -o json
-```
-
-The preparation script verifies the npm tarball's SHA-512 against the published
-release. `--tarball` reuses a download, and `--skill` selects a baseline skill
-directory. It creates a standalone manifest and copies the three cases, avoiding
-changes to this repository's PR discovery or automatic session count. A hosted
-preview uploads the selected public inputs; static verification does not.
-
-Requests and input digests:
-
-| Variant | Request | Skill delivery archive SHA-256 |
-| --- | --- | --- |
-| Baseline, 3 sessions | `cmvqzqx1n000501j3zniz7dn6` | `2bf0b27ea9c121502447b5ec3be8ed2e2a3dd84fbb0d4e1c20b42fda1a96d230` |
-| Command/routing revision, 3 sessions | `cmvqzuque000k01j3wx4m11r0` | `87510d7ecaae70281876d216cf5da80b7e46bb246f1916438275f4bf96b50582` |
-| Added web-fixture example, 1 session | `cmvr00bvt000101kkyzzalxbm` | `9f79a333ead20884101738ec4793da5605dbe42aec1e7d34ca7a9846801bf093` |
-
-The CLI delivery archive stayed
-`07aa02426cca5dc909258da4a271f88f342d830d7519cfaeec698675d687a41d`.
-That archive wraps the npm tarball; it is not the npm integrity digest. Preview
-comparison confirmed identical prompts, criteria, model pins, and sample counts
-for each matched case. The final revision adds a web-specific reference; only
-the affected web case is rerun against that complete bundle.
-
-All **7/7 sessions passed**: baseline 3/3, command/routing revision 3/3, and the
-web-example follow-up 1/1. No execution or judging failures remained. This is a
-friction improvement, not a measured pass-rate increase. The first revision's
-pooled median duration worsened because its web case took longer; inspect the
-matched task results below rather than claiming an overall timing win.
-
-The web-fixture task passed in all three variants, but the traces distinguish
-successful setup from avoidable work:
-
-| Skill | Tool calls | Session duration | CLI bundle searches |
-| --- | --- | --- | --- |
-| [Baseline](https://agents.withgauge.com/gauge-x6af/runs/cmvqzr6q700150it67nx3zzus) | 36 | 167 s | Page schema and gateway-image command |
-| [Command/routing revision](https://agents.withgauge.com/gauge-x6af/runs/cmvqzuwwn001d0it6nctn11r1) | 44 | 361 s | Schema, case fields, and gateway-image command |
-| [Concrete fixture example](https://agents.withgauge.com/gauge-x6af/runs/cmvr00kgj003g0it6ryqd0ob0) | 23 | 119 s | None |
-
-The final session read `references/web-fixtures.md` at trace event 9, wrote the
-fixture at 51, and invoked static verification and dry-run at 64 and 68. The
-baseline's schema/gateway bundle searches appear at 49, 109, 113, and 116.
-`gauge run compare` with baseline batch `cmvqzr6q600140it6859y7klf` and final
-request `cmvr00bvt000101kkyzzalxbm` confirmed the same eval revision
-`505f1fb2b8aa`, both criteria passing, and a 48.7 s duration difference. These are
-single observations, not a causal speedup estimate. Tool-call counts include all
-harness tools; Gauge's one-turn metric hides this intra-turn work. The first
-candidate's web run used execution attempt 2, another reason not to treat timing
-as a controlled benchmark.
-
-The reusable local-eval task passed in both the
-[baseline](https://agents.withgauge.com/gauge-x6af/runs/cmvqzr6po00130it6jm1pfng2)
-and [command/routing revision](https://agents.withgauge.com/gauge-x6af/runs/cmvqzuwwc001b0it6rt00prab).
-
-For PR setup, the
-[baseline](https://agents.withgauge.com/gauge-x6af/runs/cmvqzr6qk00170it6vq97598d)
-tried `gauge evals --help` at event 31 and received the unknown-command error at
-34. It then searched CLI internals and npm versions, treating the skill's stale
-command as a newer feature missing from the released CLI. It eventually found
-`gauge run --verify`, completed the task, and passed, but its final response still
-called `evals verify` the newer command. This is observable skill-induced friction
-despite a passing outcome.
-
-The [revised PR session](https://agents.withgauge.com/gauge-x6af/runs/cmvqzuwwx001f0it6s9prqkni)
-used current `gauge-cases/` discovery, default merge checkout, and
-`gauge run --verify --hosted`. It used 48 tool calls versus 67 in the baseline,
-without attempting `gauge evals`. It still searched bundle internals for schemas
-and verifier behavior (events 58–94), so the revision did not eliminate all
-discovery work. Both agents also had to override the sandbox scaffold's generic
-`.NET bin/` ignore rule to retain the npm executable; that is environment friction.
-The matched PR comparison reported both criteria passing and session duration
-707 s → 579 s, with the same caveat about single samples. The remaining PR
-analysis points to a missing compact criteria-case example, confusing `org`
-versus `orgId` terminology, offline agent-name discovery, and uncertainty around
-artifact upload formats. Those are follow-ups, not resolved by this patch.
-
-Observed CLI follow-ups, separate from skill changes:
-
-- `gauge run --verify --files ...` rejects file selection. Verification checks
-  configured discovery, while preview and launch support `--files`.
-- An ignored npm tarball was reported missing by static verification, although
-  hosted preview packaged it successfully. The standalone pilot avoids this
-  discrepancy by keeping its tarball outside ignored Git paths.
-- The released CLI's saved organization required reselection after upgrade.
-  Passing the discovered current organization with `--org gauge` worked.
-- The local web-fixture dry-run did not name a gateway-image pull command;
-  `gauge local runtime pull` obtains both required images.
-- Local OpenCode credentials defaulted to a Codex login. This surprised agents
-  and deserves clearer credential guidance rather than credential-file inspection.
-- The staged Gauge CLI input itself distracted agents, which inspected its
-  tarball before deciding it was setup tooling rather than the nested eval's
-  product. This is a fixture limitation, not evidence against the skill alone.
-- One hosted `run get --logs` reader remained alive after emitting its snapshot,
-  despite help promising to print events and exit. Later snapshots used a bounded
-  command timeout; the remaining reader was stopped after sessions completed.
-
-The skill revisions replace obsolete `evals`/`run-requests` instructions, correct
-case discovery and working-tree preview behavior, retain current CI checkout
-semantics, route reusable local measurements to the CLI's current guidance, and
-provide a concrete canonical-URL fixture example. Static skill validation, the
-existing suite's hosted-capability verification, the standalone pilot, and the
-web-fixture example all passed. The helper accepted the published tarball and
-rejected non-release bytes.
+Remaining gaps: a compact example of a criteria case, organization selection
+(now documented as `orgId` through `gauge orgs use <slug> --project`), and
+clearer guidance on agent model names and artifact upload formats. The pilot
+cases are not part of the automatic PR suite below.
 
 ## Existing PR suite
 
