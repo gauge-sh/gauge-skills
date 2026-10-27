@@ -80,8 +80,8 @@ Use installed CLI guidance and validation for the supported configuration. Edito
 schemas are versioned separately from the CLI; the configuration's `version`
 remains `2`. The schemas linked below describe the PR input and case shapes:
 
-- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.6.0/gauge.json)
-- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.6.0/case.json)
+- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.8.0/gauge.json)
+- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.8.0/case.json)
 
 Associate the schemas in an editor or validate against them externally; do not
 add `$schema` to `gauge.json`, whose runtime schema is strict. Prefer the installed
@@ -225,8 +225,9 @@ input selects files from an uploaded artifact whose root contains `dist/`:
 }
 ```
 
-Build the exact PR head using the repository's toolchain, then upload already
-unpacked files using the same Actions artifact envelope as above. Match `paths`
+Build the candidate PR with the repository's toolchain and existing checkout
+settings, then upload already unpacked files using the same Actions artifact
+envelope as above. Match `paths`
 and each command's explicit relative path to the uploaded artifact layout, not
 just the build checkout. Include runtime companion files in the selection. Gauge
 validates ELF headers, restores executable permissions, preserves the bundle,

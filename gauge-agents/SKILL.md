@@ -10,11 +10,12 @@ description: Test how coding agents discover and use your product. Use when aske
 Check `gauge --version`. If it is missing, install it with Node.js 22.13 or later:
 
 ```sh
-GAUGE_SKIP_SKILL_INSTALL=1 npm install -g @withgauge/cli
+npm install -g @withgauge/cli
 ```
 
-The Skill is already installed; skip the CLI’s automatic Skill installation to
-preserve this selected version and its references.
+The Skill is already installed. When `gauge instructions` or `gauge init`
+recommends `gauge install-skill`, skip it to preserve this selected version and
+its references.
 
 Honor a requested CLI version by installing `@withgauge/cli@<version>` from npm.
 A locally built package can report the same version as a release; for release
