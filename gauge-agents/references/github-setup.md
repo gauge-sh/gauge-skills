@@ -90,8 +90,8 @@ Use installed CLI guidance and validation for the supported configuration. Edito
 schemas are versioned separately from the CLI; the configuration's `version`
 remains `2`. The schemas linked below describe the PR input and case shapes:
 
-- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.8.0/gauge.json)
-- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.8.0/case.json)
+- [Repository configuration](https://agents.withgauge.com/schemas/gauge/v2.10.0/gauge.json)
+- [Eval-case frontmatter](https://agents.withgauge.com/schemas/gauge/v2.10.0/case.json)
 
 Associate the schemas in an editor or validate against them externally; do not
 add `$schema` to `gauge.json`, whose runtime schema is strict. Prefer the installed
