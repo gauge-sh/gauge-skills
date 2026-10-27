@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "org": "gauge-x6af",
+  "org": "gauge",
   "cases": ["gauge-evals/pr-setup-*.md"],
   "checks": {
     "paths": ["gauge-agents/**", "gauge-chat/**"]
