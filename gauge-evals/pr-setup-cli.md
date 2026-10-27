@@ -4,8 +4,8 @@ criteria:
   rubric: The final patch provides a supported Gauge Agents PR-check setup for the relevant
     customer-facing surface of this repository, using the repository facts and any user clarification.
     Configuration must be coherent with current supported Gauge interfaces and actual paths.
-    If the workspace slug cannot be discovered from available configuration or the user, an
-    explicitly identified prerequisite is acceptable; inventing an org or claiming unconfigured
+    If the Gauge organization cannot be discovered from available configuration or the user, an
+    explicitly identified prerequisite is acceptable; inventing an organization or claiming unconfigured
     checks work is not. Advice alone without a reviewable patch is insufficient. Assess the
     actual config and CI wiring in the resulting branch or linked worktree, using tool-write/read
     and validation evidence when necessary. An empty exported main-checkout diff alone is not

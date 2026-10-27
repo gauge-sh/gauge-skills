@@ -9,8 +9,9 @@ the product. A dedicated Gauge workflow is optional.
 Read the repository's package manifests, build/release workflows, docs provider
 configuration, Skill directories, and existing `gauge.json`. Identify the surface
 the user wants tested; ask only when repository context does not establish it.
-Use the real Gauge workspace slug from configuration, authenticated org discovery,
-or the user. Do not invent a slug or assume the GitHub organization name matches.
+Identify the user's Gauge organization by its public slug from `gauge orgs`, or
+use the slug or organization ID the user provides. Do not invent one or assume the
+GitHub organization name matches.
 
 | Surface | Input | Existing infrastructure to use |
 | --- | --- | --- |
@@ -36,15 +37,24 @@ controls are separate from `gauge.json` and GitHub branch protection.
 
 ## Author `gauge.json`
 
-The v2 format uses root `org` to enable same-repository PR checks. It has no
-`github.enabled` switch, build recipe, or root workflow setting. Preserve existing
-inputs and cases. This example shows shapes; choose only relevant inputs and replace
-all example values with repository facts:
+Record the organization with `gauge orgs use <slug> --project`. The CLI resolves
+the public slug to the canonical organization ID and writes it to root `orgId`,
+which CLI runs and same-repository PR checks use. The command looks the
+organization up in Gauge, so it needs `gauge auth login` or an organization API
+key; without access, leave the selection as an explicit prerequisite. Do not
+hand-write `orgId` or put a slug in it. A root `org` field is the legacy Gauge
+Agents workspace selection; the CLI asks for reselection when it finds one, so
+replace it with the same command rather than editing it. Everyone running Gauge
+in the repository needs CLI 0.25.0 or later.
+
+The v2 format has no `github.enabled` switch, build recipe, or root workflow
+setting. Preserve existing inputs and cases. This example shows shapes; choose only
+relevant inputs and replace all example values with repository facts:
 
 ```json
 {
   "version": 2,
-  "org": "actual-workspace-slug",
+  "orgId": "00000000-0000-0000-0000-000000000000",
   "inputs": {
     "cli": {
       "type": "npm-package",
