@@ -206,7 +206,7 @@ agent's feasible validation and accurate handoff; unavailable external access is
 not itself a setup failure. Preserve the distinction between a local setup patch
 and end-to-end execution with that patch.
 
-The shared public-fixture persona supplies only the workspace (`gauge-x6af`),
+The shared public-fixture persona supplies only the organization (`gauge`),
 local-experiment authorization, and scope/access facts. It does not supply a
 support verdict or solution. The prompts identify the desired product surface
 without revealing the expected implementation or limitation. The existing
