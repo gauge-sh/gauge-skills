@@ -1,9 +1,26 @@
 ---
 name: gauge-agents
-description: Test how coding agents discover and use your product. Use when asked to run agent evaluations, test whether agents can use an SDK, API, CLI, or MCP server, find where agents struggle with onboarding, or measure whether docs and skills improve agent success. Runs real agent sessions and scores outcomes through the Gauge CLI. Also use for Gauge Agents tasks; not ordinary unit tests or AI-search visibility tracking.
+description: Measure and improve how coding agents discover and use your product with Gauge Agents. Use when asked to run agent evaluations, test whether agents can use an SDK, API, CLI, MCP server, docs, or skill, find where agents struggle with onboarding, measure which tools agents choose, set up Gauge PR checks for a repository, or read and explain Gauge Agents results, sessions, and failed Gauge checks. Works through the Gauge CLI or the Gauge MCP. Not for ordinary unit tests or AI-search visibility tracking.
 ---
 
 # Gauge Agents
+
+## Choose the interface
+
+Gauge Agents has two interfaces:
+
+- **Gauge CLI** (`gauge`) authors measurements and inputs, runs sessions locally
+  or hosted, and sets up PR checks. It needs a terminal and Node.js.
+- **Gauge MCP** (`https://app.withgauge.com/mcp`) reads hosted results
+  (summaries, evals, preferences, sessions, insights, traces, diffs, and
+  analytics), launches saved evals, and cancels runs. It needs no install, only
+  an authorized connection.
+
+When the Gauge MCP tools are connected and the task is to read or act on
+existing hosted results, or when no terminal is available, read
+[references/mcp.md](references/mcp.md). Use the CLI for everything else and for
+all local work. Do not ask the user to log in to the CLI only to read results
+the connected MCP already provides.
 
 ## Install the CLI
 

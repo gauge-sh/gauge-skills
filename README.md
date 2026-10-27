@@ -4,8 +4,8 @@ Installable skills for optimizing how AI discovers, describes, selects, and uses
 
 | Skill | Purpose | Connection |
 | --- | --- | --- |
-| [Gauge Agents](gauge-agents/SKILL.md) | Evaluate coding-agent experience and preference, then test improvements. | Gauge CLI |
-| [Gauge Chat](gauge-chat/SKILL.md) | Measure AI answers and competitors, research opportunities, and improve brand visibility. | Gauge MCP |
+| [Gauge Agents](gauge-agents/SKILL.md) | Evaluate coding-agent experience and preference, then test improvements. | Gauge CLI or Gauge MCP |
+| [Gauge Chat](gauge-chat/SKILL.md) | Measure AI answers and competitors, research opportunities, and improve brand visibility. | Gauge MCP or Gauge CLI |
 
 ## Install from this checkout
 
