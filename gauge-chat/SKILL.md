@@ -1,6 +1,6 @@
 ---
 name: gauge-chat
-description: Improve how AI chat and search models describe and recommend your brand with Gauge Chat. Use for AI visibility, competitor and citation research, sentiment analysis, prompt tracking, and content improvements through the Gauge MCP.
+description: Improve how AI assistants such as ChatGPT, Perplexity, Gemini, Copilot, and Google AI Overviews describe and recommend your brand with Gauge Chat. Use for AI search visibility (GEO/AEO), share of voice, and competitor, citation, and sentiment research in AI answers; managing Gauge's tracked topics and prompts; Action Center recommendations; and creating or updating content to improve AI visibility. Works through the Gauge MCP or the `gauge chat` CLI. Not for LLM prompt management or coding-agent evals.
 ---
 
 # Gauge Chat
@@ -18,6 +18,8 @@ If Gauge is not connected, use [the MCP setup guide](https://docs.withgauge.com/
 Resolve the organization and category before querying. For agency connections, discover the client organizations and use the intended client's scope. Read available company context, competitor context, content strategy, and writing guidance through the memory tools. Do not assume the MCP client already has the context used by Gauge's in-app agent.
 
 For questions about Gauge itself (features, plans, billing), read the documentation with `fetch_docs_page`, starting from its `llms.txt` index.
+
+For bulk prompt changes, exports, or scripted reporting in a terminal, read [references/cli.md](references/cli.md).
 
 ## Measure what models say
 

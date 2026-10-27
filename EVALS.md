@@ -24,6 +24,18 @@ Remaining gaps: a compact example of a criteria case, organization selection
 clearer guidance on agent model names and artifact upload formats. The pilot
 cases are not part of the automatic PR suite below.
 
+## Gauge MCP session diagnosis (manual)
+
+[`gauge-cases/connector/session-diagnosis.md`](gauge-cases/connector/session-diagnosis.md)
+asks an agent with the `gauge-agents` Skill and an authorized Gauge MCP
+connection (`config.mcpRefs`) to explain a known failed PR-check session. It
+tests whether the agent reads hosted results through the MCP instead of trying to
+authenticate the CLI, cites session evidence, and launches nothing. The named
+session failed its CI criterion for keeping GitHub's default merge checkout,
+which that criterion now accepts; a strong answer still reports the judged
+failure from the evidence. It is manual-only and hosted-only; select it with
+`--files gauge-cases/connector/session-diagnosis.md`. No results yet.
+
 ## Existing PR suite
 
 The learning goal is to find where the candidate `gauge-agents` Skill fails to
