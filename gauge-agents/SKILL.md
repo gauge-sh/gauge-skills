@@ -54,6 +54,7 @@ Choose guidance for the user's task:
 | Save a reusable task-success evaluation | `gauge instructions eval` |
 | Save a product-choice measurement | `gauge instructions preference` |
 | Inputs, shared case files, previews, and launches | `gauge instructions run` |
+| Stub or redirect proposed CLI commands in a hosted session | `gauge instructions cli-rules --hosted` |
 | Read evidence and compare results | `gauge instructions session-analysis` |
 
 Local is the default, independently of login or a configured organization. Use
@@ -72,6 +73,14 @@ For replacing HTTPS documentation during a local test, read
 [references/web-fixtures.md](references/web-fixtures.md) for a complete fixture
 example. A `web-fixture` supports local canonical-URL replacement; a `website`
 input resolves GitHub deployment previews and requires hosted execution.
+
+For proposed CLI behavior, use `gauge run --hosted --cli-rules rules.json`
+with a prompt, saved eval/preference, or case files/spec. These launch-only
+rules require no optimization or prior session and do not edit the fixture
+repository or saved measurement. They require the target executable to be
+available in the session. For discovery tests, expose the proposed command in
+help or docs rather than naming it in the task. Read the CLI rules instructions
+for the v4 stub/redirect format and inspect the trace to confirm a rule fired.
 
 ## Set up repository PR checks
 
