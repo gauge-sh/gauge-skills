@@ -1,0 +1,8 @@
+[
+  {"seq": 12, "type": "agent_message", "text": "The quickstart says to run `npm install acme`. I’ll install it and add the SDK import shown in the example."},
+  {"seq": 13, "type": "tool_call", "tool_id": "install", "name": "exec_command", "tool_kind": "shell", "input": {"cmd": "npm install acme"}},
+  {"seq": 14, "type": "tool_result", "tool_id": "install", "name": "exec_command", "is_error": true, "output": {"exit_code": 1, "output": "npm error code E404\nnpm error 404 Not Found - GET https://registry.npmjs.org/acme\nnpm error 404 'acme@*' is not in this registry."}},
+  {"seq": 15, "type": "agent_message", "text": "The documented package is unavailable. The code example imports `@acme/sdk`, so the installation command may be wrong. I’ll check the registry before continuing."},
+  {"seq": 16, "type": "tool_call", "tool_id": "lookup", "name": "exec_command", "tool_kind": "shell", "input": {"cmd": "npm view @acme/sdk name version"}},
+  {"seq": 17, "type": "tool_result", "tool_id": "lookup", "name": "exec_command", "is_error": false, "output": {"exit_code": 0, "output": "name = '@acme/sdk'\nversion = '2.4.1'"}}
+]
