@@ -32,8 +32,8 @@ Each criterion is `{"name": "...", "rubric": "..."}`. Two to five per eval.
   miss: a required option, a newer API, a step marked required.
 - **Stable names.** Keep criterion names fixed (`sdk-installed`,
   `key-from-env`, `project-builds`) so results compare across runs. Edit rubric text in
-  place with `gauge eval edit <id> --criteria-file criteria.json`, including each
-  criterion's `id` from `gauge eval get <id> -o json`; a list without ids
+  place with `gauge eval edit <id> --criteria-file criteria.json --hosted`, including each
+  criterion's `id` from `gauge eval get <id> --hosted -o json`; a list without ids
   replaces the whole set.
 
 Overfit signs: more than about six criteria, criteria that restate the docs page
@@ -68,17 +68,17 @@ Read `gauge run insight <run-id>`, the criterion reasoning, and the trace
 | --- | --- | --- |
 | Docs or product problem | Several agents or samples fail the same way; the trace shows the agent following the docs, an outdated example, a missing step, a confusing error message, or no page answering its question | Report it with the page or message to change. This is the useful finding. |
 | Agent miss | One agent or one sample fails; others pass with the same inputs; the docs it read were correct | Note it; do not change docs for it. Rerun only if the decision depends on it. |
-| Bad criterion | The judge's reasoning shows the rubric demanded something the prompt did not ask for, was ambiguous, or failed a correct alternative approach; or a clearly broken result passed | Fix the rubric, then `gauge run regrade <run-id>` to re-judge without a new session. Disclose that the criterion changed. |
+| Bad criterion | The judge's reasoning shows the rubric demanded something the prompt did not ask for, was ambiguous, or failed a correct alternative approach; or a clearly broken result passed | Fix the rubric, then `gauge run regrade <run-id> --hosted` to re-judge without a new session. Disclose that the criterion changed. |
 | Setup or platform failure | Result is `EXECUTION_FAILED`, `INPUT_FAILED`, `JUDGE_FAILED`, or `INCOMPLETE`; a missing credential or connection; setup script errors; the agent never reached the task | Not a product finding. Fix the setup, or report the error verbatim with `gauge feedback`. Do not speculate about the cause. |
 
 A preference session where the agent picks a competitor is a measured result,
-not a failure. Read its objection (`gauge issues list --type objection`) to see
+not a failure. Read its objection (`gauge issues list --type objection --hosted`) to see
 why.
 
 ## Maintenance
 
 - After a docs or product change ships, rerun the evals that covered it. If an
-  issue no longer appears, mark it with `gauge issues fix <id>`; it reopens if
+  issue no longer appears, mark it with `gauge issues fix <id> --hosted`; it reopens if
   agents hit it again.
 - When an eval passes every time on every agent for several weeks, either make
   it harder (a less common stack, a persona without credentials) or run it less

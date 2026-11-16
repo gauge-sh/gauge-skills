@@ -105,7 +105,7 @@ Set up <Product> in this React app so we can see page views.
 - Preference cases use `preference: {kind: open-ended}` or `{kind: head-to-head,
   brandA, brandB}` instead of `criteria`. They measure choices; they do not
   enter the org's tracked rankings. For tracking over time, use saved
-  preference prompts (SKILL.md phase 7).
+  preference prompts ([after-first-result.md](after-first-result.md)).
 
 Validate after every edit (no login, no cost):
 

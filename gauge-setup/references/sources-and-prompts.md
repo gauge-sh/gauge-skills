@@ -82,7 +82,7 @@ usually better as an eval.
 - The team's own repository: only for evals that change it, never for
   preference prompts the team wants to compare over time.
 
-Add a second scenario to a prompt (`gauge preference scenarios add <id> --repo
+Add a second scenario to a prompt (`gauge preference scenarios add <id> --hosted --repo
 <url>`) rather than duplicating the prompt.
 
 ## Personas
