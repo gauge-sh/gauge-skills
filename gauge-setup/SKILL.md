@@ -105,9 +105,11 @@ Then draft the first test:
 - **One head-to-head**, only if the materials name a competitor: "We're
   choosing between <Product> and <Competitor> for <capability>. Which should we
   use here, and why? No code yet."
-- **Agents**: two, one sample each: `claude-code` (its default model) and one
-  open model from `gauge models list --hosted` (for example an `opencode:`
-  target). Use what the user asks for instead, if they say.
+- **Agents**: two, one sample each, from `gauge models list --hosted -o json`
+  (it lists only what this org can run; some plans run open models only).
+  Prefer `claude-code` with its default model when it is listed, plus one open
+  model (an `opencode:<model>` target). Use what the user asks for instead, if
+  they say.
 - **Where the agent works**: Gauge's default starter project, or a small public
   starter repository on the developer's stack (a framework's official template).
   Never the team's own private repository.
@@ -128,7 +130,7 @@ Here is a first test for <Product>. About <n> minutes, <n> sessions, ~<credits> 
 2. Do agents pick <Product>? "<category prompt>"
 3. <Product> or <Competitor>? "<head-to-head prompt>"     (only if a competitor was found)
 
-Agents: Claude Code and <open model>, once each. Source: <README / quickstart / comparison page>.
+Agents: <agent> and <agent>, once each. Source: <README / quickstart / comparison page>.
 Reply "go" to run it, or tell me what to change.
 ```
 
@@ -151,7 +153,7 @@ gauge brands list --hosted -o json          # add the product once if missing:
 gauge brands add "<Product>" --kind owned --websites <url> --package <name>:npm --hosted
 
 gauge eval create --hosted --name "<first task>" --text "<eval prompt>" \
-  --criteria-file checks.json --agent claude-code --agent <open-model-target> \
+  --criteria-file checks.json --agent <target> --agent <target> \
   --tag setup [--repo <starter-repo-url>]
 gauge preference create --hosted --kind open-ended --name "<category>" \
   --text "<category prompt>" --tag setup
@@ -160,7 +162,7 @@ gauge preference create --hosted --kind head-to-head --brand-a "<Product>" \
 
 gauge watch --hosted                                   # link for the user
 gauge run --hosted --eval <id> --samples 1 --yes -o json        # prints runRequestId
-gauge run --hosted --preference <id> --agent claude-code --agent <open-model-target> --samples 1 --yes -o json
+gauge run --hosted --preference <id> --agent <target> --agent <target> --samples 1 --yes -o json
 ```
 
 `checks.json` is a JSON array of `{"name": "...", "rubric": "..."}`. Preference
