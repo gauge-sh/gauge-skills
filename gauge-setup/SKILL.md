@@ -78,15 +78,19 @@ only seeds an empty workspace, so run it before creating anything else.
 Read what exists before proposing anything. Use `-o json` and parse it.
 
 ```sh
-gauge status -o json
-gauge brands list -o json
-gauge preference list -o json
-gauge preference tracking show -o json
-gauge eval list -o json
-gauge personas list -o json
-gauge models list -o json
-gauge billing status -o json
+gauge status --hosted -o json
+gauge brands list --hosted -o json
+gauge preference list --hosted -o json
+gauge preference tracking show --hosted -o json
+gauge eval list --hosted -o json
+gauge personas list --hosted -o json
+gauge models list --hosted -o json
+gauge billing status --hosted -o json
 ```
+
+Pass `--hosted` on every command in this skill. The CLI can default to local
+mode in a workspace, and then `eval list`, `preference list`, `models list`, and
+`run list` read this machine instead of the org.
 
 Seeded or earlier prompts are a starting point, not a result. Keep the good ones,
 propose replacements for generic ones, and never delete anything without asking.
@@ -169,8 +173,8 @@ Creates: brands, 7 preference prompts, 3 eval sets. Schedule: none yet.
 ```
 
 There is no CLI command that prices a launch. Estimate credits from the org's
-own history when it has any (`gauge usage --since 30d -o json`, or
-`creditsCharged` in `gauge run get <id> -o json`), separately for preference
+own history when it has any (`gauge usage --since 30d --hosted -o json`, or
+`creditsCharged` in `gauge run get <id> --hosted -o json`), separately for preference
 and eval sessions. With no history, give the session count, say cost per session
 depends on agent, model, and task length, and offer to measure it on a smaller
 first launch.
