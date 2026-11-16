@@ -36,7 +36,9 @@ result.
 - **Talk about the product, not about Gauge.** The user should hear "can an
   agent add <Product> to a Next.js app?", not "eval set", "criteria",
   "preference prompt", "persona", "scenario", or "gauge.json". Use Gauge's terms
-  only when the user asks how it works.
+  only when the user asks how it works. This holds for progress updates too:
+  say "the setup test" and "the agent-choice test", "once per agent" rather than
+  "one sample", and leave out Gauge ids and configuration details.
 - **Do not invent facts.** Every competitor, feature, and task in the test must
   come from the repository, its docs, or the user. If no competitor is named in
   their materials, leave the head-to-head out rather than guess.
