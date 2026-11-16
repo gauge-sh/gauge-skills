@@ -139,6 +139,10 @@ quickstart at all), ask about it in this same message, with your best guess as
 the default. Do not ask about budget, schedules, personas, data sources, or
 long-term plans now; those come after the first finding.
 
+The user must see the plan before they can approve it. If you ask through a
+question or choice tool, put the whole plan in the question itself; never ask
+"run this?" first and show the plan afterwards.
+
 Edits to the plan do not need a second full round: apply them and launch if the
 user's reply already approves ("go, but use Python").
 
