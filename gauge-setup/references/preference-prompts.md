@@ -102,10 +102,13 @@ correctable reason is the strongest finding a prompt can produce.
      story, or "not familiar with it".
    - Low value: objections that are only popularity ("X is the standard
      choice"). Keep at most one such prompt as a baseline.
-4. **Does the wording flip the result?** For the prompts you plan to track, try
-   a second phrasing of the same situation. If the choice flips, the prompt
-   measures phrasing, not preference; keep the phrasing closest to how the
-   evidence describes the situation.
+4. **Does the wording flip the result?** Compare each prompt with its second
+   phrasing from the check run (budgeted in step 6 of SKILL.md; do not launch
+   extra phrasings without a new approval). If the choice flips, the prompt
+   measures phrasing, not preference. Either way, keep one phrasing (the one
+   closest to how the evidence describes the situation) and remove the other.
+   Both were created in this setup, so say so in the report rather than asking
+   first; existing measurements still need the user's OK before removal.
 5. **How often should it run, and how many sessions each time?** See below.
 
 Then keep, rewrite, or drop each prompt, and tell the user why in one line.

@@ -61,7 +61,9 @@ The flow:
   JSON, tables of raw data, or transcript excerpts at them.
 - **Pass `--hosted` on every Gauge command.** In some workspaces the CLI
   defaults to local mode, and listings then read this machine instead of the
-  org.
+  org. If the user picked an org in step 1, also pass `--org <slug>` on every
+  Gauge command, including the ones in the templates below. Do not run
+  `gauge orgs use`; it changes the user's saved default.
 
 ## 1. Check the CLI and the org
 
@@ -70,7 +72,7 @@ Run these without commentary. Tell the user only if something blocks you.
 ```sh
 gauge --version                      # needs 0.31.0 or later; update: gauge update
 gauge auth status                    # not signed in: gauge auth login
-gauge orgs list                      # several orgs: ask which one, then pass --org <slug>
+gauge orgs list                      # several orgs: ask which one, then pass --org <slug> from here on
 gauge status --hosted -o json
 gauge eval list --hosted -o json
 gauge preference list --hosted -o json
@@ -196,8 +198,13 @@ the check run:
 - each eval once per agent
 - each preference prompt twice per agent, to see whether agents commit to a
   choice and give consistent reasons
+- a second phrasing of each preference prompt, once per agent, to see whether
+  the wording alone flips the choice (see
+  [references/preference-prompts.md](references/preference-prompts.md))
 
-Keep it to about 30 sessions unless the user asks for more. Estimate credits
+Keep it to about 40 sessions unless the user asks for more; trim prompts or
+agents rather than skipping the second phrasing. Nothing outside this count is
+launched without a new approval. Estimate credits
 from `gauge usage --since 30d --hosted -o json` (the average `RUN_DEBIT`); with
 no history, say the cost is measured on this run and give the balance.
 
@@ -216,7 +223,7 @@ Do agents choose it? (tracked weekly)
 4. <Product> or <Competitor> when <constraint>? - From: <evidence line>
 ...
 
-First, a check run to see which of these tell you something: <n> sessions on <agents>, about <n> minutes, ~<credits> credits (balance <b>).
+First, a check run to see which of these tell you something: <n> sessions on <agents> (including a second wording of each "choose it" prompt), about <n> minutes, ~<credits> credits (balance <b>), in org <org>.
 Nothing is scheduled until you've seen the results.
 Reply "go", or tell me what to change.
 ```
@@ -235,20 +242,25 @@ releases.
 gauge brands add "<Product>" --kind owned --websites <url> --package <name>:npm --hosted   # once, if missing
 gauge brands add "<Competitor>" --kind competitor --websites <url> --hosted   # each named competitor, if missing
 
-gauge eval create --hosted --name "<task>" --text "<eval prompt>" \
+gauge eval create --hosted --name "<task>" --text "<eval prompt>" --cadence none \
   --criteria-file checks.json --agent <target> --agent <target> --tag setup [--repo <url>]
 gauge preference create --hosted --kind open-ended --name "<situation>" --text "<prompt>" --tag setup
 gauge preference create --hosted --kind head-to-head --brand-a "<Product>" --brand-b "<Competitor>" \
   --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --tag setup
+# second phrasing of each preference prompt: same command, --name "<name> (wording B)"
 
 gauge watch --hosted                                         # link for the user
 gauge run --hosted --eval <id> --samples 1 --yes -o json     # prints runRequestId
 gauge run --hosted --preference <id> --agent <target> --agent <target> --samples 2 --yes -o json
+gauge run --hosted --preference <wording-b-id> --agent <target> --agent <target> --samples 1 --yes -o json
 ```
 
 `checks.json` is a JSON array of `{"name": "...", "rubric": "..."}`. Do not pass
-`--tracked` yet. Tell the user in two lines how many sessions started and where
-to watch, then wait (`gauge run wait <runRequestId> --hosted -o json`).
+`--tracked` yet. Each `gauge run` is its own launch request with its own
+`runRequestId`; note every one. Tell the user in two lines how many sessions
+started and where to watch, then wait on each request
+(`gauge run wait <runRequestId> --hosted -o json`, once per id). Do not judge
+any measurement until every request has settled.
 
 Then decide, for each measurement, whether it is worth keeping. The two kinds
 are judged differently:
