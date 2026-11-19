@@ -1,6 +1,6 @@
 ---
 name: gauge-setup
-description: Set up Gauge Agents so a team measures things worth measuring. Reads the repository and, with the user's permission, the team's own context (product and MCP analytics, docs analytics, call recordings, support questions, GitHub issues) to find what developers actually try to do and which products they weigh. Turns that evidence into Agent Preference prompts that run on a schedule and Agent Experience evals that rerun when docs or product change, checks them with one small approved run before anything is scheduled, and reports the friction and objections agents showed. Use when someone asks to set up, onboard to, configure, or get started with Gauge or Gauge Agents, asks what to test or track, or asks to refresh what Gauge tracks. Not for reading existing results only (use gauge-agents) or AI-search visibility (use gauge-chat).
+description: Set up Gauge Agents so a team measures things worth measuring. Reads the repository and, with the user's permission, the team's own context (product and MCP analytics, docs analytics, call recordings, support questions, GitHub issues) to find what developers actually try to do and which products they weigh. Drafts Agent Experience evals and Agent Preference prompts from that evidence, confirms them with the user in one short table, and creates them with the preference prompts tracked on a schedule. Use when someone asks to set up, onboard to, configure, or get started with Gauge or Gauge Agents, asks what to test or track, or asks to refresh what Gauge tracks. Not for running or iterating on measurements that already exist, or reading results (use gauge-agents), or AI-search visibility (use gauge-chat).
 ---
 
 # Gauge setup
@@ -8,8 +8,13 @@ description: Set up Gauge Agents so a team measures things worth measuring. Read
 Most teams have never written an eval. Gauge cannot see their analytics, docs
 traffic, sales calls, or support inbox, but you often can. Your job is to
 bring the two together: use the team's own context to choose a small set of
-measurements that will change what they do, write them well, and prove each one
-tells them something before it costs money every week.
+measurements that will change what they do, write them well, and get them
+running so they produce information over time.
+
+This skill ends once the measurements exist. Running them now to see which
+ones are worth keeping is a separate step, done with the gauge-agents skill;
+recommend it, but the setup is useful without it, because tracked prompts
+produce results on their own schedule.
 
 Gauge measures two things, and they run differently:
 
@@ -30,15 +35,16 @@ The flow:
 3. Ask once to read it
 4. Turn it into evidence and themes (silent)
 5. Draft the measurements
-6. Show the plan and get one approval for the check run
-7. Run the check run, keep what is worth keeping, and report
-8. Leave it running: preference prompts on a schedule, evals ready to rerun on change
+6. Confirm them with the user in one table
+7. Create them, with the preference prompts tracked
+8. Recommend a test run, and offer PR checks for the evals
 
 ## Ground rules
 
 - **Spend nothing without approval.** Creating evals and prompts is free;
-  launching sessions, rechecks, and schedules spend credits. Approval covers the
-  launch it was given for, not the next one.
+  tracking prompts on a schedule and launching sessions spend credits. The
+  confirmation in step 6 covers creating the measurements and the tracking
+  schedule it shows, nothing else. This skill launches no sessions.
 - **Read, never write, in the team's other systems.** Do not change records in
   the CRM, analytics, docs platform, or issue tracker. Do not post comments.
 - **Only derived text leaves the machine.** Raw transcripts, tickets, analytics
@@ -85,8 +91,7 @@ gauge models list --hosted -o json   # the agents this org can run
 
 - No Gauge account: `gauge onboard --website <their site>` creates one.
 - The org already has evals, prompts, or open issues: this is a refresh, not a
-  first setup. Treat existing measurements as drafts to keep, fix, or retire in
-  step 5, and never delete anything without asking.
+  first setup. See "Refreshing an existing setup" at the end.
 
 ## 2. Find the context you can reach
 
@@ -190,53 +195,50 @@ they say.
 starter repository on the stack the evidence points to. Never the team's
 private repository.
 
-## 6. Show the plan and get one approval
+## 6. Confirm them with the user in one table
 
-The approval covers creating the measurements and one check run (step 7). Size
-the check run:
+Estimate the tracking cost before you ask. Read the org's schedule from
+`gauge preference tracking show --hosted -o json`. If one exists, use its
+cadence and agents and do not change it; it is shared across the org. If none
+exists, propose weekly on the agents from step 5. Choose sessions per prompt
+per cycle with the sampling table in
+[references/preference-prompts.md](references/preference-prompts.md) (one per
+agent weekly is usually enough to notice a big swing within a month). Estimate
+credits from `gauge usage --since 30d --hosted -o json` (the average
+`RUN_DEBIT`); with no history, say the cost is measured on the first cycle and
+give the balance.
 
-- each eval once per agent
-- each preference prompt twice per agent, to see whether agents commit to a
-  choice and give consistent reasons
-- a second phrasing of each preference prompt, once per agent, to see whether
-  the wording alone flips the choice (see
-  [references/preference-prompts.md](references/preference-prompts.md))
-
-Keep it to about 40 sessions unless the user asks for more; trim prompts or
-agents rather than skipping the second phrasing. Nothing outside this count is
-launched without a new approval. Estimate credits
-from `gauge usage --since 30d --hosted -o json` (the average `RUN_DEBIT`); with
-no history, say the cost is measured on this run and give the balance.
-
-Send one message in this shape:
+Send one message in this shape, as plain text. Keep each cell short; the
+`From` column is what makes the plan believable, so never leave it out. List
+each group strongest evidence first; a later test run uses that order to
+decide what to test first.
 
 ```
-Here is what I'd measure for <Product>, based on <sources>.
+Here's what I'd set up for <Product>, based on <sources>.
 
-Can agents use it? (rerun when your docs or SDK change)
-1. "<eval prompt>" - passes if <check>; <check>.
-   From: <evidence line>. Covers: <docs pages, SDK modules, CLI commands, or MCP tools>
-2. ...
+Can agents use it? (runs when you ask, or on pull requests that touch what it covers)
+| # | Task given to the agent           | Passes if                        | Covers                 | From                                  |
+| 1 | "<eval prompt>"                   | <check>; <check>                 | <docs pages, packages> | <evidence line>                       |
+| 2 | ...                               |                                  |                        |                                       |
 
-Do agents choose it? (tracked weekly)
-3. "<open-ended prompt>" - From: <evidence line>
-4. <Product> or <Competitor> when <constraint>? - From: <evidence line>
-...
+Do agents choose it? (tracked <weekly> on <agents>)
+| # | Prompt                            | From                                  |
+| 3 | "<open-ended prompt>"             | <evidence line>                       |
+| 4 | <Product> or <Competitor>, <constraint> | <evidence line>                 |
 
-First, a check run to see which of these tell you something: <n> sessions on <agents> (including a second wording of each "choose it" prompt), about <n> minutes, ~<credits> credits (balance <b>), in org <org>.
-Nothing is scheduled until you've seen the results.
+Tracking costs about <n> sessions, ~<credits> credits a month (balance <b>), in org <org>.
+Creating the tests is free; nothing else runs until you ask.
 Reply "go", or tell me what to change.
 ```
 
-The user must see the plan before they can approve it. If you ask through a
-question or choice tool, put the whole plan in the question itself. Edits that
-come with an approval ("go, but drop 4") do not need a second round.
+The user must see the table before they can confirm it. If you ask through a
+question or choice tool, put the whole table in the question itself. Edits
+that come with a confirmation ("go, but drop 4") do not need a second round.
 
-## 7. Run the check run and report
+## 7. Create them, with the preference prompts tracked
 
-After approval, create what was approved, tagged `setup`, then launch.
-Run `gauge <command> --help` before first use of a command; flags change between
-releases.
+Run `gauge <command> --help` before first use of a command; flags change
+between releases. Tag everything `setup`.
 
 ```sh
 gauge brands add "<Product>" --kind owned --websites <url> --package <name>:npm --hosted   # once, if missing
@@ -244,87 +246,48 @@ gauge brands add "<Competitor>" --kind competitor --websites <url> --hosted   # 
 
 gauge eval create --hosted --name "<task>" --text "<eval prompt>" --cadence none \
   --criteria-file checks.json --agent <target> --agent <target> --tag setup [--repo <url>]
-gauge preference create --hosted --kind open-ended --name "<situation>" --text "<prompt>" --tag setup
+gauge preference create --hosted --kind open-ended --name "<situation>" --text "<prompt>" \
+  --samples <n> --tracked --tag setup
 gauge preference create --hosted --kind head-to-head --brand-a "<Product>" --brand-b "<Competitor>" \
-  --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --tag setup
-# second phrasing of each preference prompt: same command, --name "<name> (wording B)"
+  --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --samples <n> --tracked --tag setup
 
-gauge watch --hosted                                         # link for the user
-gauge run --hosted --eval <id> --samples 1 --yes -o json     # prints runRequestId
-gauge run --hosted --preference <id> --agent <target> --agent <target> --samples 2 --yes -o json
-gauge run --hosted --preference <wording-b-id> --agent <target> --agent <target> --samples 1 --yes -o json
+# only if the org has no schedule yet:
+gauge preference tracking set --hosted --cadence weekly --day monday --agent <target> --agent <target>
 ```
 
-`checks.json` is a JSON array of `{"name": "...", "rubric": "..."}`. Do not pass
-`--tracked` yet. Each `gauge run` is its own launch request with its own
-`runRequestId`; note every one. Tell the user in two lines how many sessions
-started and where to watch, then wait on each request
-(`gauge run wait <runRequestId> --hosted -o json`, once per id). Do not judge
-any measurement until every request has settled.
+`checks.json` is a JSON array of `{"name": "...", "rubric": "..."}`. Evals stay
+unscheduled (`--cadence none`): they are meant to run when the surfaces they
+cover change, not on a timer.
 
-Then decide, for each measurement, whether it is worth keeping. The two kinds
-are judged differently:
+## 8. Recommend a test run, and offer PR checks
 
-- **Agent Experience:** read the friction (`gauge issues list --type friction
-  --hosted -o json`, `gauge run insight <run-id> --hosted -o json`), not just the
-  verdict. A passing session with heavy friction is a finding. Sort each eval
-  with the table in
-  [references/agent-experience-evals.md](references/agent-experience-evals.md):
-  friction the team can fix (keep), clean everywhere (keep as a regression check
-  for when its surfaces change), unfair check (fix and re-judge with
-  `gauge run regrade`), setup failure (fix or drop).
-- **Agent Preference:** read the objections (`gauge issues list --type objection
-  --hosted -o json`) and what each session chose. Check the five things in
-  [references/preference-prompts.md](references/preference-prompts.md): did agents
-  commit to a choice, did they choose among the expected products, are the
-  objections something the team can change, does the wording flip the result,
-  and how often it needs to run. A prompt the product loses everywhere for the
-  same correctable reason is the strongest one to keep.
-
-Rewrite what can be fixed; rerunning a rewritten measurement needs its own
-approval. Then report:
+Get the link with `gauge watch --hosted`, then send one short message:
 
 ```
-<One sentence: the most important thing agents showed, e.g. "Agents set up <Product> but most guessed the webhook signing step; in the self-hosting comparison every agent chose <Competitor> because it believes <Product> is cloud-only.">
+Set up in <org>: <n> agent tests and <n> tracked prompts. First scheduled run: <day>. <link>
 
-Where agents struggled
-1. <friction> - <which agents, n of m sessions> - <session link>
-   Change: <the docs page, README section, error message, tool description, or package metadata to edit>
-
-Why agents chose something else
-2. <objection> - <which agents, n of m sessions> - <session link>
-   Change: <the claim to correct, the page to add>
-
-Keeping <n> of <m>: <one line on what was dropped or rewritten and why>
-These are a few sessions each: signals, not rates.
+Recommended next: a short test run to see which of these tell you something now,
+rather than after a few weekly cycles. Say "test these" and I'll show the size and cost first.
+<If the evals' surfaces are in a repository the team controls:> I can also set up PR checks
+so each agent test reruns when a pull request changes what it covers.
 ```
 
-Name the surface the team owns and the edit, not a general theme. At most four
-findings. Never paste raw JSON or tables.
-
-## 8. Leave it running
-
-Offer the two halves together, each with its own approval where it spends
-credits. Details are in [references/after-setup.md](references/after-setup.md).
-
-- **Agent Preference on a schedule.** Track the prompts that kept their place.
-  Show the cadence, the agents, sessions per cycle, credits per month, and what
-  size of change that will be able to show (see the sampling table in
-  [references/preference-prompts.md](references/preference-prompts.md)).
-  Prompts the product always wins can run less often as regression guards.
-- **Agent Experience when surfaces change.** Do not put evals on a schedule by
-  default. Offer PR checks on the repository that holds the surfaces each eval
-  covers (the gauge-agents skill sets these up, selecting each eval by the paths
-  it covers), and explain the recheck loop: ship the fix, rerun the evals that
-  cover it, see whether the friction disappeared.
+- **Test run.** If the user asks for it, use the gauge-agents skill; its
+  testing reference covers sizing, approval, and what to keep. Do not launch
+  anything from this skill.
+- **PR checks.** If the user asks, hand over to the gauge-agents skill's
+  "Set up repository PR checks" section with each eval, its checks, and its
+  covered paths (see [references/after-setup.md](references/after-setup.md)).
 - **A shared record.** Offer to write `GAUGE.md`
   ([references/context-file.md](references/context-file.md)) so the next
   session, or a refresh, starts from the same evidence and reasoning.
 
 ## Refreshing an existing setup
 
-When the user asks to refresh, or about a month after setup, repeat steps 2
-to 7 against what exists: re-read the sources, compare themes with `GAUGE.md`,
-and propose additions, rewrites, and retirements, for example a new competitor
-appearing in calls, friction that stopped appearing after a fix, or a prompt
-whose result has not moved in months.
+When the org already has measurements, or the user asks to refresh, repeat
+steps 2 to 7 against what exists: re-read the sources, compare themes with
+`GAUGE.md` if there is one, and propose additions, rewrites, and retirements in
+the same table, for example a new competitor appearing in calls, friction that
+stopped appearing after a fix, or a prompt whose result has not moved in
+months. Mark each row new, changed, or retire. Never delete or untrack anything
+without the user's confirmation.

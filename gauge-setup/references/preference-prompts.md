@@ -5,9 +5,11 @@ part of the job, and records what it chose and why. Its main finding is the
 **objection**: the reason an agent gave for choosing something else. How often
 the product is chosen matters, but the objections are what the team can act on.
 
-Preference prompts run on a schedule so the team can see the competitive
-landscape move: new agent models, a competitor's launch, the team's own docs
-and positioning changes.
+Setup creates preference prompts tracked, so they run on the org's schedule
+and the team can see the competitive landscape move: new agent models, a
+competitor's launch, the team's own docs and positioning changes. Testing a
+prompt before it accumulates results (does it force a choice, does the wording
+flip it) is done with the gauge-agents skill.
 
 ## Where the prompts come from
 
@@ -70,48 +72,6 @@ Asking "what else did you consider" reopens the field and blurs the verdict.
 Build each head-to-head around the constraint that decided real deals (cost,
 self-hosting, compliance, scale, ease of first setup). Without a constraint,
 agents often answer "it depends", which measures nothing.
-
-## The check run: is this prompt worth tracking?
-
-Run each draft prompt twice per agent before it goes on the schedule, then
-check five things. Unlike evals, a prompt that gives the same answer
-everywhere is not automatically useless: losing everywhere for one
-correctable reason is the strongest finding a prompt can produce.
-
-1. **Did the agent make a choice?**
-   - Head-to-head: "it depends" or "either works" means the prompt does not
-     force a decision. Add the deciding constraint from the evidence.
-   - Open-ended: the agent may write the feature by hand, reuse something
-     already in the starting repository, or use a framework built-in. If
-     building it yourself is a real alternative in this category (as with rate
-     limiting), keep that as a valid outcome. If not, change the situation so a
-     product choice is natural, or change the starting repository.
-2. **Did agents choose among the expected products?** Compare the choices with
-   the competitors in the evidence.
-   - Choices from a different category mean the prompt describes a different
-     problem than intended. Reword it.
-   - A product Gauge did not recognize means the brand list needs it, or an
-     alias (`gauge brands add <name> --kind competitor --hosted`,
-     `gauge brands edit <id> --aliases <list> --hosted`). Otherwise the results
-     undercount it.
-3. **Are the objections something the team can change?** Read
-   `gauge issues list --type objection --hosted -o json` and `gauge run insight
-   <run-id> --hosted -o json`.
-   - Worth tracking: objections that cite a capability that is out of date or
-     wrong, a missing docs page, a pricing misunderstanding, an unclear setup
-     story, or "not familiar with it".
-   - Low value: objections that are only popularity ("X is the standard
-     choice"). Keep at most one such prompt as a baseline.
-4. **Does the wording flip the result?** Compare each prompt with its second
-   phrasing from the check run (budgeted in step 6 of SKILL.md; do not launch
-   extra phrasings without a new approval). If the choice flips, the prompt
-   measures phrasing, not preference. Either way, keep one phrasing (the one
-   closest to how the evidence describes the situation) and remove the other.
-   Both were created in this setup, so say so in the report rather than asking
-   first; existing measurements still need the user's OK before removal.
-5. **How often should it run, and how many sessions each time?** See below.
-
-Then keep, rewrite, or drop each prompt, and tell the user why in one line.
 
 ## Sampling and cadence
 

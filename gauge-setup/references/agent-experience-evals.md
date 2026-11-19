@@ -89,34 +89,10 @@ Shared checks many evals reuse, with fixed names and text:
 Do not add a check for which docs pages the agent read; `gauge run web <run-id>
 --hosted` lists every URL it fetched and every search.
 
-## The check run: is this eval worth keeping?
+## How evals run after setup
 
-Run each eval once per agent. Read the friction (`gauge issues list --type
-friction --hosted -o json`, `gauge run insight <run-id> --hosted -o json`), the
-check results, and for anything surprising the trace (`gauge run trace`,
-`gauge run web`, `gauge run commands`). Then sort the eval:
-
-| What you see | Action |
-| --- | --- |
-| Friction tied to something the team owns: an outdated example, a missing step, a confusing error, no page answering the agent's question, a misleading tool description. With or without a failed check. | Keep. Report the surface and the edit. This is what the eval is for. |
-| Passes cleanly on every agent with little friction | Keep as a regression check that reruns when its surfaces change. Do not drop it, and do not schedule it. |
-| A check failed a correct approach, demanded something the prompt did not ask, or passed a clearly broken result | Fix the rubric and re-judge without a new session: `gauge run regrade <run-id> --hosted`. Say the check changed. |
-| One agent failed where others passed with the same inputs, and the docs it read were correct | An agent miss. Note it; do not change docs for it. |
-| `EXECUTION_FAILED`, `INPUT_FAILED`, `JUDGE_FAILED`, or `INCOMPLETE`; a missing credential; setup script errors; the agent never reached the task | Not a product finding. Fix the setup or drop the eval; report the error verbatim with `gauge feedback`. Do not speculate about the cause. |
-
-One session per agent shows friction well enough to act on. Before claiming a
-change worked, rerun with two sessions per agent on each side.
-
-## After a change ships
-
-- Rerun the evals that cover the changed surface, with the same agents, and
-  compare with the run before the change (`gauge run compare`).
-- `gauge issues recheck <issue-id> --hosted` previews rerunning the past
-  sessions that showed an issue; `--confirm` launches them. If the issue no
-  longer appears, mark it with `gauge issues fix <id> --hosted`; it reopens if
-  agents hit it again.
-- For a change that is not shipped yet, write the eval first and expect it to
-  fail until the change lands; "now passing" says the change is ready.
-- A regular schedule is only worth it to catch changes on the agents' side
-  (new model releases) for the most important task, and then monthly at most.
-  Confirm that cost separately.
+Setup creates evals unscheduled. They run when someone asks (a test run with
+the gauge-agents skill) or, once PR checks are set up, when a pull request
+touches the surfaces they cover. A regular schedule is only worth it to catch
+changes on the agents' side (new model releases) for the most important task,
+and then monthly at most; confirm that cost separately.

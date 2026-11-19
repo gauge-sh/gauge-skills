@@ -90,6 +90,15 @@ inputs for an npm package, native CLI, docs preview, or Skill, reusing the
 repository’s CI, authoring advisory Agent Preference cases, selecting relevant
 file changes, and verifying setup before committing.
 
+## Test and iterate on new measurements
+
+When the user asks to test measurements they just created (for example after
+the gauge-setup skill), or asks which of their evals and prompts are worth
+keeping, read
+[references/test-and-iterate.md](references/test-and-iterate.md). It covers
+sizing and approving a short test run, the second-wording check for preference
+prompts, what to keep or rewrite, and how to report friction and objections.
+
 ## What Gauge is
 
 Gauge helps you optimize how coding agents discover and use your product. It runs coding-agent sessions under stable conditions so you can evaluate performance and test improvements.
