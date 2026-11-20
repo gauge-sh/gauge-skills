@@ -45,25 +45,18 @@ candidate commit. No build or artifact-upload workflow is required.
 
 The config records the Gauge organization (`gauge`) as `orgId`, set with
 `gauge orgs use gauge --project`.
-[`gauge-evals/pr-setup-cli.md`](gauge-evals/pr-setup-cli.md) tests the request
-“Set up Gauge PR checks for this repo” against a pinned pre-setup CLI checkout.
-It selects only the candidate `gauge-agents` Skill and runs one Codex/GPT-6.1 Sol
-session per eligible PR update. Four additional public-repository cases cover
-Vite, GitHub CLI, FastAPI, and Astro docs, with one sample each on DeepSeek V4.1
-Flash and GLM 5.3 through OpenCode. The complete suite launches **nine sessions**
-per eligible update. See [eval coverage and interpretation](EVALS.md).
 
-`gauge.json` limits automatic case discovery to `gauge-evals/pr-setup-*.md`.
-The cases in `gauge-evals/discoverability/` are manual-only; select them explicitly
-with `--files gauge-evals/discoverability/*.md` when running a discovery pilot.
+Pull request checks discover cases under `gauge-evals/pr/`, which is currently
+empty, so no sessions run on pull requests. The earlier setup suite was removed;
+see [EVALS.md](EVALS.md). The cases in `gauge-evals/discoverability/` and
+`gauge-cases/` are manual-only; select them explicitly with `--files` when
+running a pilot.
 
-The personas preserve setup-only scope and supply no remote write credentials,
-so the inner tasks produce local setup changes or actionable fallback handoffs
-without launching nested evals. In that organization's
-**Settings → GitHub**, ensure the existing **Gauge Agents** installation includes
-`gauge-sh/gauge-skills` and enable checks for the intended target branches.
-Repository access and check settings are managed outside this config; merging
-it does not grant App access. The App needs Contents read and Checks/Pull requests write.
+In that organization's **Settings → GitHub**, ensure the existing **Gauge
+Agents** installation includes `gauge-sh/gauge-skills` and enable checks for
+the intended target branches. Repository access and check settings are managed
+outside this config; merging it does not grant App access. The App needs
+Contents read and Checks/Pull requests write.
 
 Future cases should select `config.inputs: [gauge-agents]` or
 `config.inputs: [gauge-chat]` to test one Skill at a time; omitting the selection
