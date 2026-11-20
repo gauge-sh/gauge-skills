@@ -118,9 +118,10 @@ strongest finding a prompt can produce. Check five things:
    wording. If the choice flips, the prompt measures phrasing, not preference.
    Keep the wording closest to how the evidence describes the situation: if
    that is wording B, move its text onto the tracked prompt
-   (`gauge preference edit <id> --text "<wording B>" --hosted`). Then remove
-   wording B (`gauge preference rm <wording-b-id> --hosted`); it was created
-   for this test, so say so in the report rather than asking first.
+   (`gauge preference edit <id> --text "<wording B>" --hosted`). Either way,
+   remove wording B afterwards (`gauge preference rm <wording-b-id> --hosted`),
+   whether or not the choice flipped, so later test runs do not pick it up. It
+   was created for this test, so say so in the report rather than asking first.
 5. **Is it sampled enough?** Choice results are noisy. Each period compared
    needs about 12 sessions of the prompt to show a flip (25% to 75%), 40 for a
    large move (40% to 70%), and 90 for a moderate one (50% to 70%). One session
@@ -153,16 +154,19 @@ findings. If there is a second batch, offer it here with its size and cost.
 
 ## After a change ships
 
-- Rerun the evals that cover the changed surface, with the same agents, and
-  compare with the run before the change:
+- Rerun the evals that cover the changed surface, with the same agents and
+  the same sessions per agent as the run before the change, and compare:
 
   ```sh
-  gauge run --hosted --eval <id> --samples 2 --yes -o json
+  gauge run --hosted --eval <id> --samples <same as before> --yes -o json
   gauge run compare --hosted --baseline request=<before-request-id> --candidate request=<after-request-id>
   ```
 
-  One session per agent shows friction well enough to act on; before claiming
-  a change worked, use two sessions per agent on each side.
+  One session per agent shows friction well enough to act on. To claim a change
+  worked, both sides need two sessions per agent: if the test run used one,
+  run the baseline again with `--samples 2` before the change ships, then the
+  candidate with `--samples 2` after. If the change already shipped without a
+  matching baseline, report the comparison as a signal, not a result.
 - `gauge issues recheck <issue-id> --hosted` previews rerunning the past
   sessions that showed an issue; `--confirm` launches them. If the issue no
   longer appears, mark it with `gauge issues fix <id> --hosted`; it reopens if

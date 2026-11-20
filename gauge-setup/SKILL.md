@@ -203,8 +203,10 @@ cadence and agents and do not change it; it is shared across the org. If none
 exists, propose weekly on the agents from step 5. Choose sessions per prompt
 per cycle with the sampling table in
 [references/preference-prompts.md](references/preference-prompts.md) (one per
-agent weekly is usually enough to notice a big swing within a month). Estimate
-credits from `gauge usage --since 30d --hosted -o json` (the average
+agent weekly is usually enough to notice a big swing within a month). Sessions
+a month = tracked prompts x tracked agents x sessions per prompt x cycles a
+month (about 4 for weekly); for example 5 prompts on 3 agents, one session
+each, weekly, is about 60. Estimate credits from `gauge usage --since 30d --hosted -o json` (the average
 `RUN_DEBIT`); with no history, say the cost is measured on the first cycle and
 give the balance.
 
@@ -292,3 +294,16 @@ the same table, for example a new competitor appearing in calls, friction that
 stopped appearing after a fix, or a prompt whose result has not moved in
 months. Mark each row new, changed, or retire. Never delete or untrack anything
 without the user's confirmation.
+
+In step 7, create only the rows marked new. Apply the others to the existing
+measurement rather than creating a second one:
+
+```sh
+gauge eval edit <id> --hosted --text "<new prompt>" --criteria-file checks.json   # changed eval (include check ids to keep history)
+gauge preference edit <id> --hosted --text "<new prompt>" --samples <n>           # changed prompt
+gauge preference untrack <id> --hosted     # retire a prompt but keep its history
+gauge eval rm <id> --hosted                # retire an eval (run history stays)
+```
+
+Prefer `untrack` over `rm` for preference prompts, so their trend stays
+readable.

@@ -86,9 +86,11 @@ sessions of that prompt:
 | A moderate move, such as 50% to 70% | 90 |
 
 So, for example, three agents with one session each, weekly, is 12 sessions a
-month: enough to notice a flip within a month, not a 20-point drift. Put this
+month of each prompt: enough to notice a flip within a month, not a 20-point
+drift. The org's total is that times the number of tracked prompts (5 prompts
+would be about 60 sessions a month). Put this
 in plain words in the tracking plan: "weekly on three agents, about N sessions
-a month, enough to notice a big swing within a month."
+a month in total, enough to notice a big swing in each prompt within a month."
 
 What follows:
 
