@@ -15,6 +15,11 @@
       "type": "skill",
       "source": { "type": "git" },
       "path": "gauge-chat"
+    },
+    "gauge-setup": {
+      "type": "skill",
+      "source": { "type": "git" },
+      "path": "gauge-setup"
     }
   }
 }
