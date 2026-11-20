@@ -1,7 +1,7 @@
 {
   "version": 2,
   "orgId": "88855afc-7ea3-48bd-929d-9fd7eda59aba",
-  "cases": ["gauge-evals/pr-setup-*.md"],
+  "cases": ["gauge-evals/pr/**/*.md"],
   "checks": {
     "paths": ["gauge-agents/**", "gauge-chat/**"]
   },
