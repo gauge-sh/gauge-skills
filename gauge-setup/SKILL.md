@@ -86,7 +86,7 @@ gauge preference list --hosted -o json
 gauge preference tracking show --hosted -o json
 gauge brands list --hosted -o json
 gauge issues list --hosted -o json
-gauge billing status --hosted -o json
+gauge billing status --hosted -o json   # plan, monthly credits, balance, holds per session
 gauge models list --hosted -o json   # the agents this org can run
 ```
 
@@ -185,15 +185,22 @@ For every measurement, keep one line saying where it came from, for example
 "from: 40% of agent docs traffic goes to /webhooks; 6 GitHub issues about
 signature errors". The user sees these lines in the plan.
 
-**Agents:** two or three different agents (not several models of one agent)
-from `gauge models list --hosted -o json`, choosing only entries without
-`access.locked`. Prefer the agents the evidence says developers use (docs and
-MCP analytics often show this). Without such evidence, use `claude-code` with
-its default model plus one other agent. For open models, prefer the `pi` agent
-with the strongest unlocked open models; use `opencode` only when no `pi`
-model is unlocked. On the free plan, where most agents are locked, say which
-locked agents developers likely use and that a paid plan unlocks them. Use what
-the user asks for instead, if they say.
+**Agents:** depend on the org's plan (`gauge billing status --hosted -o json`:
+`plan`, `currentSku`, `balance`) and on what it can run (`gauge models list
+--hosted -o json`, entries without `access.locked`). Prefer different agents
+over several models of one agent, and the agents the evidence says developers
+use (docs and MCP analytics often show this).
+
+- **Paid plan with frontier agents unlocked:** two or three agents, led by the
+  ones developers use; without evidence, `claude-code` with its default model
+  plus `codex` or another frontier agent.
+- **Free plan, or only open models unlocked:** usually one agent, so the
+  schedule fits the balance. Use `pi` with the strongest unlocked open model
+  (`opencode` only when no `pi` model is unlocked), and say which locked agents
+  developers likely use and that a paid plan unlocks them.
+
+Use what the user asks for instead, if they say. The schedule must fit the
+budget (step 6), so the number of agents is set there.
 
 **Where the agent works:** every eval and prompt starts in a base repository:
 an existing app on the stack the evidence points to, where the product would
@@ -238,10 +245,13 @@ a month = tracked prompts x tracked agents x sessions per prompt x cycles a
 month (about 4 for weekly); for example 5 prompts on 3 agents, one session
 each, weekly, is about 60. Estimate credits from `gauge usage --since 30d --hosted -o json` (the average
 `RUN_DEBIT`); with no history, say the cost is measured on the first cycle and
-give the balance. If the monthly estimate (sessions times the per-session
-credit hold) is more than the balance plus the plan's refills, propose a plan
-that fits as the default (fewer prompts or one agent), and offer the larger one
-as the alternative.
+give the balance. The tracking schedule must fit what the org can spend in a
+month: on a paid plan, the plan's monthly credits (`currentSku.monthlyCredits`)
+and the balance; on the free plan, the balance. With no usage history, price
+each tracked session at the preference hold (`holdsPerRun.visibility`). If the
+plan does not fit, cut agents first (one is fine), then sessions per prompt,
+then prompts, and propose only a plan that fits. Say in one line what tracking
+on more agents would cost, so a paying customer can choose it.
 
 Send one message in this shape, as plain text. Keep each cell short; the
 `From` column is what makes the plan believable, so never leave it out. List
