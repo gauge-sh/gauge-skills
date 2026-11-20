@@ -65,4 +65,5 @@ compare with `GAUGE.md`:
   them
 
 Each addition or retirement goes through the same confirmation table as the
-first setup.
+first setup, then the same follow-through: offer a test run of what is new,
+hand new evals to PR checks if they are set up, and update `GAUGE.md`.

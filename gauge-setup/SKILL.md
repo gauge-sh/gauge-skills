@@ -285,7 +285,8 @@ so each agent test reruns when a pull request changes what it covers.
 ## Refreshing an existing setup
 
 When the org already has measurements, or the user asks to refresh, repeat
-steps 2 to 7 against what exists: re-read the sources, compare themes with
+steps 2 to 8 against what exists (step 8 offers a test run and PR checks for
+the new or changed measurements, and updates `GAUGE.md` if there is one): re-read the sources, compare themes with
 `GAUGE.md` if there is one, and propose additions, rewrites, and retirements in
 the same table, for example a new competitor appearing in calls, friction that
 stopped appearing after a fix, or a prompt whose result has not moved in

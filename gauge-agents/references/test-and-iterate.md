@@ -34,10 +34,12 @@ takes the strongest measurements (the order the user confirmed them in, or the
 themes in `GAUGE.md`), preference prompts and evals in the same proportion,
 until it reaches 40. Offer the rest as a second batch after the first report.
 Estimate credits from `gauge usage --since 30d --hosted -o json` (the average
-`RUN_DEBIT`).
+`RUN_DEBIT`). With no history, which is usual right after setup, say the cost
+per session is not known yet, give the session count and the balance, and
+report the actual cost after the run.
 
 ```
-Test run for <Product>: <n> sessions on <agents>, about <n> minutes, ~<credits> credits (balance <b>).
+Test run for <Product>: <n> sessions on <agents>, about <n> minutes, ~<credits> credits or "cost measured on this run" (balance <b>).
 Covers tests 1-3 and prompts 4-7, plus a second wording of each prompt. <Tests 8-9 can go in a second run.>
 Reply "go", or tell me what to change.
 ```
