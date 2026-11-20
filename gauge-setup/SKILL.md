@@ -77,6 +77,7 @@ Run these without commentary. Tell the user only if something blocks you.
 
 ```sh
 gauge --version                      # needs 0.31.0 or later; update: gauge update
+                                     # missing: npm install -g @withgauge/cli (Node.js 22.13+)
 gauge auth status                    # not signed in: gauge auth login
 gauge orgs list                      # several orgs: ask which one, then pass --org <slug> from here on
 gauge status --hosted -o json
@@ -185,15 +186,29 @@ For every measurement, keep one line saying where it came from, for example
 signature errors". The user sees these lines in the plan.
 
 **Agents:** two or three different agents (not several models of one agent)
-from `gauge models list --hosted -o json`, preferring the agents the evidence
-says developers use (docs and MCP analytics often show this). Without such
-evidence, use `claude-code` with its default model plus one other agent, such
-as an `opencode:<model>` open model. Use what the user asks for instead, if
-they say.
+from `gauge models list --hosted -o json`, choosing only entries without
+`access.locked`. Prefer the agents the evidence says developers use (docs and
+MCP analytics often show this). Without such evidence, use `claude-code` with
+its default model plus one other agent. For open models, prefer the `pi` agent
+with the strongest unlocked open models; use `opencode` only when no `pi`
+model is unlocked. On the free plan, where most agents are locked, say which
+locked agents developers likely use and that a paid plan unlocks them. Use what
+the user asks for instead, if they say.
 
-**Where the agent works:** Gauge's default starter project, or a small public
-starter repository on the stack the evidence points to. Never the team's
-private repository.
+**Where the agent works:** every eval and prompt starts in a project, and its
+wording must match that project. Hosted, it defaults to Gauge's scaffold, not
+an app on any particular stack. So either:
+
+- word the task as starting from nothing ("Create a Next.js app that sends a
+  welcome email on signup"), and keep the default; or
+- when the task assumes an existing app ("this Express app", "our Next.js
+  checkout"), give it a small public starter repository on that stack
+  (`--repo <url> --ref <commit>` on `gauge eval create` or
+  `gauge preference create`).
+
+A prompt that says "this Next.js app" but starts in the scaffold measures the
+agent building a project first, not the product. Never use the team's private
+repository.
 
 ## 6. Confirm them with the user in one table
 
@@ -210,7 +225,10 @@ a month = tracked prompts x tracked agents x sessions per prompt x cycles a
 month (about 4 for weekly); for example 5 prompts on 3 agents, one session
 each, weekly, is about 60. Estimate credits from `gauge usage --since 30d --hosted -o json` (the average
 `RUN_DEBIT`); with no history, say the cost is measured on the first cycle and
-give the balance.
+give the balance. If the monthly estimate (sessions times the per-session
+credit hold) is more than the balance plus the plan's refills, propose a plan
+that fits as the default (fewer prompts or one agent), and offer the larger one
+as the alternative.
 
 Send one message in this shape, as plain text. Keep each cell short; the
 `From` column is what makes the plan believable, so never leave it out. List
@@ -221,9 +239,9 @@ decide what to test first.
 Here's what I'd set up for <Product>, based on <sources>.
 
 Can agents use it? (runs when you ask, or on pull requests that touch what it covers)
-| # | Task given to the agent           | Passes if                        | Covers                 | From                                  |
-| 1 | "<eval prompt>"                   | <check>; <check>                 | <docs pages, packages> | <evidence line>                       |
-| 2 | ...                               |                                  |                        |                                       |
+| # | Task given to the agent           | Starts in          | Passes if                        | Covers                 | From                                  |
+| 1 | "<eval prompt>"                   | <new project or repo> | <check>; <check>                 | <docs pages, packages> | <evidence line>                       |
+| 2 | ...                               |                    |                                  |                        |                                       |
 
 Do agents choose it? (tracked <weekly> on <agents>)
 | # | Prompt                            | From                                  |
@@ -249,9 +267,9 @@ gauge brands add "<Product>" --kind owned --websites <url> --package <name>:npm 
 gauge brands add "<Competitor>" --kind competitor --websites <url> --hosted   # each named competitor, if missing
 
 gauge eval create --hosted --name "<task>" --text "<eval prompt>" --cadence none \
-  --criteria-file checks.json --agent <target> --agent <target> --tag setup [--repo <url>]
+  --criteria-file checks.json --agent <target> --agent <target> --tag setup [--repo <url> --ref <commit>]
 gauge preference create --hosted --kind open-ended --name "<situation>" --text "<prompt>" \
-  --samples <n> --tracked --tag setup
+  --samples <n> --tracked --tag setup [--repo <url> --ref <commit>]
 gauge preference create --hosted --kind head-to-head --brand-a "<Product>" --brand-b "<Competitor>" \
   --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --samples <n> --tracked --tag setup
 

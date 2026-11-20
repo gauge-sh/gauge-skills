@@ -66,12 +66,19 @@ Asking "what else did you consider" reopens the field and blurs the verdict.
 
 - "We're down to A and B for <capability>. We have to <constraint>. Don't write
   code yet. Which one should we use here, and why?"
-- "A or B for <capability> in this <stack> app? Pick one and explain the choice.
+- "A or B for <capability> in a <stack> app? Pick one and explain the choice.
   No code yet."
 
 Build each head-to-head around the constraint that decided real deals (cost,
 self-hosting, compliance, scale, ease of first setup). Without a constraint,
 agents often answer "it depends", which measures nothing.
+
+A competitor counts as evidence only when a source names it as the reason
+someone chose, or would choose, differently, together with the constraint: a
+lost deal, a migration request, an issue saying "<Competitor> handles this and
+you don't". A link to a competitor's blog post, a passing mention, or a feature
+comparison with no decision behind it does not count. When nothing qualifies,
+create no head-to-heads and ask the user who they lose to and why.
 
 ## Sampling and cadence
 

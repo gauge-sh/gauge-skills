@@ -103,6 +103,14 @@ gh issue list --repo <owner/repo> --state all --limit 100 --search "setup OR ins
 gh issue view <number> --repo <owner/repo> --comments
 ```
 
+Without `gh`, read public issues through the GitHub API (no token needed, at
+most 60 requests an hour):
+
+```sh
+curl -s "https://api.github.com/repos/<owner>/<repo>/issues?state=all&sort=comments&per_page=50"
+curl -s "https://api.github.com/repos/<owner>/<repo>/issues/<number>/comments"
+```
+
 Look for repeated setup questions, confusing errors, missing examples, and
 "alternative to" or migration requests.
 
