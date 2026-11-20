@@ -198,9 +198,11 @@ private repository.
 ## 6. Confirm them with the user in one table
 
 Estimate the tracking cost before you ask. Read the org's schedule from
-`gauge preference tracking show --hosted -o json`. If one exists, use its
-cadence and agents and do not change it; it is shared across the org. If none
-exists, propose weekly on the agents from step 5. Choose sessions per prompt
+`gauge preference tracking show --hosted -o json`. If it already runs on some
+agents, use its cadence and agents and do not change it; it is shared across
+the org. A new org has a default schedule with no agents, so tracked prompts
+would never run: in that case, or if there is no schedule, propose weekly on
+the agents from step 5, and say in the table that this turns tracking on. Choose sessions per prompt
 per cycle with the sampling table in
 [references/preference-prompts.md](references/preference-prompts.md) (one per
 agent weekly is usually enough to notice a big swing within a month). Sessions
@@ -253,7 +255,7 @@ gauge preference create --hosted --kind open-ended --name "<situation>" --text "
 gauge preference create --hosted --kind head-to-head --brand-a "<Product>" --brand-b "<Competitor>" \
   --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --samples <n> --tracked --tag setup
 
-# only if the org has no schedule yet:
+# only if the schedule has no agents yet (a new org), after the user confirmed it:
 gauge preference tracking set --hosted --cadence weekly --day monday --agent <target> --agent <target>
 ```
 
