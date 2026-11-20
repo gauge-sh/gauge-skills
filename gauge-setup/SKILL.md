@@ -287,23 +287,32 @@ so each agent test reruns when a pull request changes what it covers.
 ## Refreshing an existing setup
 
 When the org already has measurements, or the user asks to refresh, repeat
-steps 2 to 8 against what exists (step 8 offers a test run and PR checks for
-the new or changed measurements, and updates `GAUGE.md` if there is one): re-read the sources, compare themes with
-`GAUGE.md` if there is one, and propose additions, rewrites, and retirements in
-the same table, for example a new competitor appearing in calls, friction that
-stopped appearing after a fix, or a prompt whose result has not moved in
-months. Mark each row new, changed, or retire. Never delete or untrack anything
-without the user's confirmation.
+steps 2 to 8 against what exists: re-read the sources, compare themes with
+`GAUGE.md` if there is one, and propose additions, rewrites, and retirements,
+for example a new competitor appearing in calls, friction that stopped
+appearing after a fix, or a prompt whose result has not moved in months.
 
-In step 7, create only the rows marked new. Apply the others to the existing
+In the step 6 table, start every row with its status (`new`, `changed`, or
+`retire`), and list the retirements together under their own heading, saying
+what each one does: "stops tracking, history kept" for a prompt, "deletes the
+test, run history kept" for an eval. Replace the line "Creating the tests is
+free" with one that names what will change. A "go" covers only the rows shown;
+if the user's reply is unclear about a retirement, ask again for that row.
+
+In step 7, create only the `new` rows. Apply the others to the existing
 measurement rather than creating a second one:
 
 ```sh
-gauge eval edit <id> --hosted --text "<new prompt>" --criteria-file checks.json   # changed eval (include check ids to keep history)
-gauge preference edit <id> --hosted --text "<new prompt>" --samples <n>           # changed prompt
-gauge preference untrack <id> --hosted     # retire a prompt but keep its history
-gauge eval rm <id> --hosted                # retire an eval (run history stays)
+gauge eval edit <id> --hosted --text "<new prompt>"            # changed eval prompt; checks keep their history
+gauge preference edit <id> --hosted --text "<new prompt>" --samples <n>
+gauge preference untrack <id> --hosted     # retire a prompt; its history stays
+gauge eval rm <id> --hosted                # retire an eval; run history stays
 ```
+
+To change an eval's checks, first read their ids with
+`gauge eval get <id> --hosted -o json`, then pass `--criteria-file` with every
+check to keep, each with its `id` (only new checks go without one). A criteria
+list without ids replaces the whole set and drops each check's history.
 
 Prefer `untrack` over `rm` for preference prompts, so their trend stays
 readable.

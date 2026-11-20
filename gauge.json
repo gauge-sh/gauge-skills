@@ -3,7 +3,7 @@
   "orgId": "88855afc-7ea3-48bd-929d-9fd7eda59aba",
   "cases": ["gauge-evals/pr/**/*.md"],
   "checks": {
-    "paths": ["gauge-agents/**", "gauge-chat/**"]
+    "paths": ["gauge-agents/**", "gauge-chat/**", "gauge-setup/**"]
   },
   "inputs": {
     "gauge-agents": {
