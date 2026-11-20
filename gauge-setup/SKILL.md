@@ -195,20 +195,33 @@ model is unlocked. On the free plan, where most agents are locked, say which
 locked agents developers likely use and that a paid plan unlocks them. Use what
 the user asks for instead, if they say.
 
-**Where the agent works:** every eval and prompt starts in a project, and its
-wording must match that project. Hosted, it defaults to Gauge's scaffold, not
-an app on any particular stack. So either:
+**Where the agent works:** every eval and prompt starts in a base repository:
+an existing app on the stack the evidence points to, where the product would
+actually be added. The task then reads like a real request in that app ("Send a
+welcome email when a technician account is created"). Never ask the agent to
+create a project ("Create a Next.js app that..."): scaffolding takes most of
+the session, and none of it is about the product.
 
-- word the task as starting from nothing ("Create a Next.js app that sends a
-  welcome email on signup"), and keep the default; or
-- when the task assumes an existing app ("this Express app", "our Next.js
-  checkout"), give it a small public starter repository on that stack
-  (`--repo <url> --ref <commit>` on `gauge eval create` or
-  `gauge preference create`).
+Choose from Gauge's catalog first:
 
-A prompt that says "this Next.js app" but starts in the scaffold measures the
-agent building a project first, not the product. Never use the team's private
-repository.
+```sh
+gauge repos list --hosted -o json   # Gauge-provided repos have "isSystem": true
+```
+
+Match the `stack:` tag to the evidence (Next.js issues, an Express example).
+Prefer `tier:mature` apps (real features: users, jobs, settings) for tasks that
+fit into an existing flow, and `tier:starter` for a first install. `slot:`
+tags say what an app already has (`slot:auth:filled`); avoid an app whose slot
+for the product's category is already filled by a competitor. Read the
+chosen repo's README so the prompt names a flow that exists. If nothing in the
+catalog fits the stack (a Cloudflare Worker, a CLI tool), use a small public
+repository pinned to a commit. Pass the repository with `--repo <url>` (and
+`--ref <commit>` for one outside the catalog) on `gauge eval create` and
+`gauge preference create`. Never use the team's private repository, and do not
+rely on Gauge's default scaffold.
+
+Before showing the table, re-read every prompt against its repository: each
+one names something that exists there, and none asks for a new project.
 
 ## 6. Confirm them with the user in one table
 
@@ -240,13 +253,13 @@ Here's what I'd set up for <Product>, based on <sources>.
 
 Can agents use it? (runs when you ask, or on pull requests that touch what it covers)
 | # | Task given to the agent           | Starts in          | Passes if                        | Covers                 | From                                  |
-| 1 | "<eval prompt>"                   | <new project or repo> | <check>; <check>                 | <docs pages, packages> | <evidence line>                       |
+| 1 | "<eval prompt>"                   | <repo name>        | <check>; <check>                 | <docs pages, packages> | <evidence line>                       |
 | 2 | ...                               |                    |                                  |                        |                                       |
 
 Do agents choose it? (tracked <weekly> on <agents>)
-| # | Prompt                            | From                                  |
-| 3 | "<open-ended prompt>"             | <evidence line>                       |
-| 4 | <Product> or <Competitor>, <constraint> | <evidence line>                 |
+| # | Prompt                            | Starts in   | From                                  |
+| 3 | "<open-ended prompt>"             | <repo name> | <evidence line>                       |
+| 4 | <Product> or <Competitor>, <constraint> | <repo name> | <evidence line>           |
 
 Tracking costs about <n> sessions, ~<credits> credits a month (balance <b>), in org <org>.
 Creating the tests is free; nothing else runs until you ask.

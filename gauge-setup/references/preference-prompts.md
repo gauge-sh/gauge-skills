@@ -47,8 +47,8 @@ Weak:
 - "Use a modern, developer-friendly observability platform." (steers toward a
   brand by its marketing words)
 
-Vary only what changes the choice: the starting repository (an empty project
-or an existing app on a common stack), constraints the developer states, and
+Vary only what changes the choice: the starting repository (a starter or an
+existing app on a common stack from `gauge repos list --hosted`), constraints the developer states, and
 who the developer is. Three to five prompts across distinct situations beat
 twenty paraphrases. Add a second starting repository to a prompt
 (`gauge preference scenarios add <id> --hosted --repo <url>`) rather than

@@ -31,9 +31,9 @@ fix.
 
 - Write what a real developer would type, in one or two sentences: the goal and
   the stack. "Set up <Product> in this Next.js app so page views are recorded."
-  A prompt that says "this <stack> app" needs a starting repository on that
-  stack (`--repo`); otherwise word it as starting from nothing ("Create a
-  Next.js app that records page views with <Product>").
+  The eval starts in a base repository on that stack (see "Where the agent
+  works" in SKILL.md), so the prompt can refer to the app and one of its real
+  flows. Never ask the agent to create a project.
 - Name the product, not the steps. Do not name the API, function, flag, or
   concept the docs teach. If the agent only succeeds when the prompt names it,
   the docs did not help.
