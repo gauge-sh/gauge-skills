@@ -1,6 +1,6 @@
 ---
 name: gauge-agents
-description: Measure and improve how coding agents discover and use your product with Gauge Agents. Use when asked to run agent evaluations, test whether agents can use an SDK, API, CLI, MCP server, docs, or skill, find where agents struggle with onboarding, measure which tools agents choose, set up Gauge PR checks for a repository, or read and explain Gauge Agents results, sessions, and failed Gauge checks. Works through the Gauge CLI or the Gauge MCP. Not for ordinary unit tests or AI-search visibility tracking.
+description: Measure and improve how coding agents discover and use your product with Gauge Agents. Use when asked to run agent evaluations, test whether agents can use an SDK, API, CLI, MCP server, docs, or skill, find where agents struggle with onboarding, measure which tools agents choose, set up Gauge PR checks for a repository, or read and explain Gauge Agents results, sessions, and failed Gauge checks. Works through the Gauge CLI or the Gauge MCP. Not for first-time setup or deciding what to measure (use gauge-setup), ordinary unit tests, or AI-search visibility tracking.
 ---
 
 # Gauge Agents

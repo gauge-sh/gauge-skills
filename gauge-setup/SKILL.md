@@ -1,6 +1,6 @@
 ---
 name: gauge-setup
-description: Set up Gauge Agents so a team measures things worth measuring. Reads the repository and, with the user's permission, the team's own context (product and MCP analytics, docs analytics, call recordings, support questions, GitHub issues) to find what developers actually try to do and which products they weigh. Drafts Agent Experience evals and Agent Preference prompts from that evidence, confirms them with the user in one short table, and creates them with the preference prompts tracked on a schedule. Use when someone asks to set up, onboard to, configure, or get started with Gauge or Gauge Agents, asks what to test or track, or asks to refresh what Gauge tracks. Not for running or iterating on measurements that already exist, or reading results (use gauge-agents), or AI-search visibility (use gauge-chat).
+description: Set up Gauge Agents so a team measures things worth measuring. Reads the repository and, with the user's permission, the team's own context (product and MCP analytics, docs analytics, call recordings, support questions, GitHub issues) to find what developers actually try to do and which products they weigh. Drafts Agent Experience evals and Agent Preference prompts from that evidence, confirms them with the user in one short table, and creates them with the preference prompts tracked on a schedule. Use when someone asks to set up, onboard to, configure, or get started with Gauge or Gauge Agents, asks what to test or track, or asks to refresh what Gauge tracks. Not for setting up PR checks, running or iterating on measurements that already exist, or reading results (use gauge-agents), or AI-search visibility (use gauge-chat).
 ---
 
 # Gauge setup
@@ -56,7 +56,7 @@ The flow:
   evidence for something, leave it out rather than guess.
 - **Talk about the product, not about Gauge.** Say "the webhooks setup test" or
   "the self-hosting comparison", not "eval set", "criteria", "persona",
-  "scenario", "samples", or "gauge.json". "Friction" and "objections" are fine
+  "scenario", "samples", "targets", or "gauge.json". "Friction" and "objections" are fine
   with a short gloss the first time ("where agents struggled", "why agents chose
   something else"); the user will see those words in Gauge.
 - **Report errors as they are.** Quote the failing command and its error. Check
@@ -237,9 +237,10 @@ one names something that exists there, and none asks for a new project.
 Estimate the tracking cost before you ask. Read the org's schedule from
 `gauge preference tracking show --hosted -o json`. If it already runs on some
 agents, use its cadence and agents and do not change it; it is shared across
-the org. A new org has a default schedule with no agents, so tracked prompts
-would never run: in that case, or if there is no schedule, propose weekly on
-the agents from step 5, and say in the table that this turns tracking on. Choose sessions per prompt
+the org. If the schedule has no agents (a new org starts this way, and an
+existing org can too), tracked prompts would never run: in that case, or if
+there is no schedule, propose weekly on the agents from step 5, and say in the
+table that this turns tracking on. This applies to a refresh too. Choose sessions per prompt
 per cycle with the sampling table in
 [references/preference-prompts.md](references/preference-prompts.md) (one per
 agent weekly is usually enough to notice a big swing within a month). Sessions
@@ -247,13 +248,21 @@ a month = tracked prompts x tracked agents x sessions per prompt x cycles a
 month (about 4 for weekly); for example 5 prompts on 3 agents, one session
 each, weekly, is about 60. Estimate credits from `gauge usage --since 30d --hosted -o json` (the average
 `RUN_DEBIT`); with no history, say the cost is measured on the first cycle and
-give the balance. The tracking schedule must fit what the org can spend in a
-month: on a paid plan, the plan's monthly credits (`currentSku.monthlyCredits`)
-and the balance; on the free plan, the balance. With no usage history, price
-each tracked session at the preference hold (`holdsPerRun.visibility`). If the
-plan does not fit, cut agents first (one is fine), then sessions per prompt,
-then prompts, and propose only a plan that fits. Say in one line what tracking
-on more agents would cost, so a paying customer can choose it.
+give the balance. The tracking schedule must fit the credits the org gets
+again every period, not its current balance (the balance already contains
+those credits, and a free org's signup credits do not come back):
+
+- **Paid plan:** a month of tracking stays within about half the plan's
+  monthly credits (`currentSku.monthlyCredits`), leaving the rest for test runs
+  and PR checks.
+- **Free plan:** one weekly cycle stays within the free weekly credits (100;
+  each week the balance is topped back up to 100 if it is lower).
+
+With no usage history, price each tracked session at the preference hold
+(`holdsPerRun.visibility`). If the plan does not fit, cut agents first (one is
+fine), then sessions per prompt, then prompts, and propose only a plan that
+fits. Say in one line what tracking on more agents would cost, so a paying
+customer can choose it.
 
 Send one message in this shape, as plain text. Keep each cell short; the
 `From` column is what makes the plan believable, so never leave it out. List
@@ -292,15 +301,20 @@ gauge brands add "<Product>" --kind owned --websites <url> --package <name>:npm 
 gauge brands add "<Competitor>" --kind competitor --websites <url> --hosted   # each named competitor, if missing
 
 gauge eval create --hosted --name "<task>" --text "<eval prompt>" --cadence none \
-  --criteria-file checks.json --agent <target> --agent <target> --tag setup [--repo <url> --ref <commit>]
+  --criteria-file checks.json --agent <target> --agent <target> --tag setup --repo <url> [--ref <commit>]
 gauge preference create --hosted --kind open-ended --name "<situation>" --text "<prompt>" \
-  --samples <n> --tracked --tag setup [--repo <url> --ref <commit>]
+  --samples <n> --tracked --tag setup --repo <url> [--ref <commit>]
 gauge preference create --hosted --kind head-to-head --brand-a "<Product>" --brand-b "<Competitor>" \
-  --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --samples <n> --tracked --tag setup
+  --name "<Product> vs <Competitor>: <constraint>" --text "<prompt>" --samples <n> --tracked --tag setup \
+  --repo <url> [--ref <commit>]
 
-# only if the schedule has no agents yet (a new org), after the user confirmed it:
+# only if the schedule has no agents yet, after the user confirmed it:
 gauge preference tracking set --hosted --cadence weekly --day monday --agent <target> --agent <target>
 ```
+
+Every create passes the "Starts in" repository from the confirmed table
+(`--ref` only for a repository outside Gauge's catalog); without `--repo`,
+hosted sessions start in Gauge's default scaffold.
 
 `checks.json` is a JSON array of `{"name": "...", "rubric": "..."}`. Evals stay
 unscheduled (`--cadence none`): they are meant to run when the surfaces they
