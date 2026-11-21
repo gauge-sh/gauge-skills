@@ -275,6 +275,7 @@ decide what to test first.
 
 ```
 Here's what I'd set up for <Product>, based on <sources>.
+<If some sources were out of reach:> These would get sharper with <the missing sources: usage analytics, support questions, call notes>.
 
 Can agents use it? (runs when you ask, or on pull requests that touch what it covers)
 | # | Task given to the agent           | Starts in          | Passes if                        | Covers                 | From                                  |
