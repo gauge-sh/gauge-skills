@@ -259,8 +259,8 @@ those credits, and a free org's signup credits do not come back):
   each week the balance is topped back up to 100 if it is lower).
 
 With no usage history, price each tracked session by its model: use the
-model's preference hold from `gauge models list --hosted -o json` when it is
-listed; otherwise about 10 credits for an open model (`pi` or `opencode`) and
+model's preference hold (`creditHolds.preference` in
+`gauge models list --hosted -o json`) when it is listed; otherwise about 10 credits for an open model (`pi` or `opencode`) and
 the org-wide preference hold (`holdsPerRun.visibility`) for any other model.
 Name the per-session figure in the table, and say the real cost is measured
 on the first cycle. If the plan does not fit, cut agents first (one is
