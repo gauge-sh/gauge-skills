@@ -4,7 +4,7 @@ Installable skills for optimizing how AI discovers, describes, selects, and uses
 
 | Skill | Purpose | Connection |
 | --- | --- | --- |
-| [Gauge Agents](gauge-agents/SKILL.md) | Evaluate coding-agent experience and preference, then test improvements. | Gauge CLI or Gauge MCP |
+| [Gauge Agents](gauge-agents/SKILL.md) | Set up what to measure from your own context, evaluate coding-agent experience and preference, then test improvements. | Gauge CLI or Gauge MCP |
 | [Gauge Chat](gauge-chat/SKILL.md) | Measure AI answers and competitors, research opportunities, and improve brand visibility. | Gauge MCP or Gauge CLI |
 
 ## Install from this checkout
@@ -29,6 +29,7 @@ Each skill can also be installed independently by passing only its name.
 
 ## Example requests
 
+- “Set up Gauge for our SDK and figure out what's worth measuring.”
 - “Set up Gauge PR checks for this repo.”
 - “Test whether a coding agent can use our SDK to complete its first integration.”
 - “Run an evaluation to find where coding agents struggle with our onboarding.”
@@ -58,8 +59,7 @@ the intended target branches. Repository access and check settings are managed
 outside this config; merging it does not grant App access. The App needs
 Contents read and Checks/Pull requests write.
 
-Future cases should select `config.inputs: [gauge-agents]` or
-`config.inputs: [gauge-chat]` to test one Skill at a time; omitting the selection
-attaches both. Skill inputs do not install the CLI or authorize the MCP connection.
+Future cases should select one input, such as `config.inputs: [gauge-agents]`,
+to test one Skill at a time; omitting the selection attaches all of them. Skill inputs do not install the CLI or authorize the MCP connection.
 `checks.paths` watches both Skill directories; Gauge always watches `gauge.json`
 and case paths too. The cases supply the evals that consume the selected Skill input.
