@@ -65,7 +65,10 @@ The flow:
   defaults to local mode, and listings then read this machine instead of the
   org. If the user picked an org in step 1, also pass `--org <slug>` on every
   Gauge command, including the ones in the templates below. Do not run
-  `gauge orgs use`; it changes the user's saved default.
+  `gauge orgs use` without `--project`; plain `gauge orgs use` changes the
+  user's saved default. PR-check setup records the org with
+  `gauge orgs use <slug> --project`, which only writes the repository's
+  `gauge.json`.
 
 ## 1. Check the CLI and the org
 
@@ -256,8 +259,10 @@ those credits, and a free org's signup credits do not come back):
 
 With no usage history, price each tracked session by its model: use the
 model's preference hold (`creditHolds.preference` in
-`gauge models list --hosted -o json`) when it is listed; otherwise about 10 credits for an open model (`pi` or `opencode`) and
-the org-wide preference hold (`holdsPerRun.visibility`) for any other model.
+`gauge models list --hosted -o json`) when it is listed. Otherwise, price a
+session on the `pi` or `opencode` agent (they run open models) at about 10
+credits, and a session on any other agent at the org-wide preference hold
+(`holdsPerRun.visibility`).
 Name the per-session figure in the table, and say the real cost is measured
 on the first cycle. If the plan does not fit, cut agents first (one is
 fine), then sessions per prompt, then prompts, and propose only a plan that
