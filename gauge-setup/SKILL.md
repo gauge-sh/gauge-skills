@@ -258,8 +258,12 @@ those credits, and a free org's signup credits do not come back):
 - **Free plan:** one weekly cycle stays within the free weekly credits (100;
   each week the balance is topped back up to 100 if it is lower).
 
-With no usage history, price each tracked session at the preference hold
-(`holdsPerRun.visibility`). If the plan does not fit, cut agents first (one is
+With no usage history, price each tracked session by its model: use the
+model's preference hold from `gauge models list --hosted -o json` when it is
+listed; otherwise about 10 credits for an open model (`pi` or `opencode`) and
+the org-wide preference hold (`holdsPerRun.visibility`) for any other model.
+Name the per-session figure in the table, and say the real cost is measured
+on the first cycle. If the plan does not fit, cut agents first (one is
 fine), then sessions per prompt, then prompts, and propose only a plan that
 fits. Say in one line what tracking on more agents would cost, so a paying
 customer can choose it.
