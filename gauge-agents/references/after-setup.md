@@ -31,14 +31,13 @@ Recommend this when the surfaces the evals cover live in a repository the team
 controls. Each eval becomes a case file in that repository, and its
 `config.checks.paths` lists the surfaces it covers, so a pull request that
 touches those paths runs that eval against the pull request's own docs preview,
-package, or CLI build. The gauge-agents skill sets this up (its "Set up
-repository PR checks" section); hand over the evals, their checks, and their
-covered paths rather than redoing that work here. Leave a reviewable change and
+package, or CLI build. Set it up with [github-setup.md](github-setup.md),
+using the evals, their checks, and their covered paths from setup. Leave a reviewable change and
 commit only if the user asks.
 
 For surfaces outside a repository (a hosted docs site, a public API), the
-evals are rerun after a change ships; the gauge-agents skill's test reference
-covers that loop.
+evals are rerun after a change ships;
+[test-and-iterate.md](test-and-iterate.md) covers that loop.
 
 A preference case can also run on pull requests that change positioning (a
 comparison page, the README's pitch), to see whether objections move before the

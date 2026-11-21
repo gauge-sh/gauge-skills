@@ -1,7 +1,7 @@
 # Test and iterate on new measurements
 
 Use this after new evals or preference prompts are created (for example by the
-gauge-setup skill, which tags them `setup`), or whenever the user asks whether
+setup workflow in [setup.md](setup.md), which tags them `setup`), or whenever the user asks whether
 their measurements are any good. A short test run shows which ones tell the team
 something now, instead of waiting several scheduled cycles, and which need
 rewriting.

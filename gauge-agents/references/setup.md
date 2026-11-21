@@ -1,9 +1,4 @@
----
-name: gauge-setup
-description: Set up Gauge Agents so a team measures things worth measuring. Reads the repository and, with the user's permission, the team's own context (product and MCP analytics, docs analytics, call recordings, support questions, GitHub issues) to find what developers actually try to do and which products they weigh. Drafts Agent Experience evals and Agent Preference prompts from that evidence, confirms them with the user in one short table, and creates them with the preference prompts tracked on a schedule. Use when someone asks to set up, onboard to, configure, or get started with Gauge or Gauge Agents, asks what to test or track, or asks to refresh what Gauge tracks. Not for setting up PR checks, running or iterating on measurements that already exist, or reading results (use gauge-agents), or AI-search visibility (use gauge-chat).
----
-
-# Gauge setup
+# Set up Gauge for a team
 
 Most teams have never written an eval. Gauge cannot see their analytics, docs
 traffic, sales calls, or support inbox, but you often can. Your job is to
@@ -11,10 +6,11 @@ bring the two together: use the team's own context to choose a small set of
 measurements that will change what they do, write them well, and get them
 running so they produce information over time.
 
-This skill ends once the measurements exist. Running them now to see which
-ones are worth keeping is a separate step, done with the gauge-agents skill;
-recommend it, but the setup is useful without it, because tracked prompts
-produce results on their own schedule.
+This workflow ends once the measurements exist. Running them now to see which
+ones are worth keeping is a separate step
+([test-and-iterate.md](test-and-iterate.md)); recommend it, but the setup is
+useful without it, because tracked prompts produce results on their own
+schedule.
 
 Gauge measures two things, and they run differently:
 
@@ -44,7 +40,7 @@ The flow:
 - **Spend nothing without approval.** Creating evals and prompts is free;
   tracking prompts on a schedule and launching sessions spend credits. The
   confirmation in step 6 covers creating the measurements and the tracking
-  schedule it shows, nothing else. This skill launches no sessions.
+  schedule it shows, nothing else. This workflow launches no sessions.
 - **Read, never write, in the team's other systems.** Do not change records in
   the CRM, analytics, docs platform, or issue tracker. Do not post comments.
 - **Only derived text leaves the machine.** Raw transcripts, tickets, analytics
@@ -110,7 +106,7 @@ Then take stock of other sources by looking, not by asking:
 - Whether the repository is on GitHub, and whether its issues and discussions
   are public
 
-[references/context-sources.md](references/context-sources.md) lists what each
+[context-sources.md](context-sources.md) lists what each
 source is good for and how to read it. Do not read private data yet.
 
 ## 3. Ask once to read it
@@ -136,7 +132,7 @@ real usage or customer context.
 ## 4. Turn it into evidence and themes
 
 Read each approved source with the recipe in
-[references/context-sources.md](references/context-sources.md). Write what you
+[context-sources.md](context-sources.md). Write what you
 learn to a local evidence file outside the repository (or in a gitignored path),
 in this shape:
 
@@ -170,7 +166,7 @@ Draft a small set. Fewer, well-chosen measurements beat many weak ones.
 actually attempt, written as a developer would ask it, naming the product but
 not the steps. Two to four checks each, observable and grounded in the docs.
 Record which owned surfaces it exercises. See
-[references/agent-experience-evals.md](references/agent-experience-evals.md).
+[agent-experience-evals.md](agent-experience-evals.md).
 
 **Agent Preference prompts: three to six.**
 
@@ -181,7 +177,7 @@ Record which owned surfaces it exercises. See
   does not count), built around the
   constraint that decided real deals ("we have to self-host", "free tier only").
 
-See [references/preference-prompts.md](references/preference-prompts.md).
+See [preference-prompts.md](preference-prompts.md).
 
 For every measurement, keep one line saying where it came from, for example
 "from: 40% of agent docs traffic goes to /webhooks; 6 GitHub issues about
@@ -242,7 +238,7 @@ existing org can too), tracked prompts would never run: in that case, or if
 there is no schedule, propose weekly on the agents from step 5, and say in the
 table that this turns tracking on. This applies to a refresh too. Choose sessions per prompt
 per cycle with the sampling table in
-[references/preference-prompts.md](references/preference-prompts.md) (one per
+[preference-prompts.md](preference-prompts.md) (one per
 agent weekly is usually enough to notice a big swing within a month). Sessions
 a month = tracked prompts x tracked agents x sessions per prompt x cycles a
 month (about 4 for weekly); for example 5 prompts on 3 agents, one session
@@ -338,14 +334,14 @@ rather than after a few weekly cycles. Say "test these" and I'll show the size a
 so each agent test reruns when a pull request changes what it covers.
 ```
 
-- **Test run.** If the user asks for it, use the gauge-agents skill; its
-  testing reference covers sizing, approval, and what to keep. Do not launch
-  anything from this skill.
-- **PR checks.** If the user asks, hand over to the gauge-agents skill's
-  "Set up repository PR checks" section with each eval, its checks, and its
-  covered paths (see [references/after-setup.md](references/after-setup.md)).
+- **Test run.** If the user asks for it, follow
+  [test-and-iterate.md](test-and-iterate.md): it covers sizing, approval, and
+  what to keep. Nothing launches before the user approves that run's size.
+- **PR checks.** If the user asks, follow [github-setup.md](github-setup.md)
+  with each eval, its checks, and its covered paths (see
+  [after-setup.md](after-setup.md)).
 - **A shared record.** Offer to write `GAUGE.md`
-  ([references/context-file.md](references/context-file.md)) so the next
+  ([context-file.md](context-file.md)) so the next
   session, or a refresh, starts from the same evidence and reasoning.
 
 ## Refreshing an existing setup

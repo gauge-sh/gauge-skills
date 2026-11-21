@@ -9,7 +9,7 @@ Setup creates preference prompts tracked, so they run on the org's schedule
 and the team can see the competitive landscape move: new agent models, a
 competitor's launch, the team's own docs and positioning changes. Testing a
 prompt before it accumulates results (does it force a choice, does the wording
-flip it) is done with the gauge-agents skill.
+flip it) is covered in [test-and-iterate.md](test-and-iterate.md).
 
 ## Where the prompts come from
 

@@ -32,7 +32,7 @@ fix.
 - Write what a real developer would type, in one or two sentences: the goal and
   the stack. "Set up <Product> in this Next.js app so page views are recorded."
   The eval starts in a base repository on that stack (see "Where the agent
-  works" in SKILL.md), so the prompt can refer to the app and one of its real
+  works" in [setup.md](setup.md)), so the prompt can refer to the app and one of its real
   flows. Never ask the agent to create a project.
 - Name the product, not the steps. Do not name the API, function, flag, or
   concept the docs teach. If the agent only succeeds when the prompt names it,
@@ -95,7 +95,7 @@ Do not add a check for which docs pages the agent read; `gauge run web <run-id>
 ## How evals run after setup
 
 Setup creates evals unscheduled. They run when someone asks (a test run with
-the gauge-agents skill) or, once PR checks are set up, when a pull request
+[test-and-iterate.md](test-and-iterate.md)) or, once PR checks are set up, when a pull request
 touches the surfaces they cover. A regular schedule is only worth it to catch
 changes on the agents' side (new model releases) for the most important task,
 and then monthly at most; confirm that cost separately.

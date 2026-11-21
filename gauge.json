@@ -3,7 +3,7 @@
   "orgId": "88855afc-7ea3-48bd-929d-9fd7eda59aba",
   "cases": ["gauge-evals/pr/**/*.md"],
   "checks": {
-    "paths": ["gauge-agents/**", "gauge-chat/**", "gauge-setup/**"]
+    "paths": ["gauge-agents/**", "gauge-chat/**"]
   },
   "inputs": {
     "gauge-agents": {
@@ -15,11 +15,6 @@
       "type": "skill",
       "source": { "type": "git" },
       "path": "gauge-chat"
-    },
-    "gauge-setup": {
-      "type": "skill",
-      "source": { "type": "git" },
-      "path": "gauge-setup"
     }
   }
 }
