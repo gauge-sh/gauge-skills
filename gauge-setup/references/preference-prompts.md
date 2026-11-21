@@ -31,7 +31,8 @@ person, or a deal.
 These measure whether agents reach for the product unprompted. The prompt must
 not name the product, its packages, or a competitor. Phrase it the way a
 developer talks to an agent inside a repository: a goal, a little context, no
-shopping list.
+shopping list. Do not tell the agent to pick a vendor ("choose a suitable
+email service"); the need itself should make the choice part of the job.
 
 Good:
 
@@ -73,11 +74,12 @@ Build each head-to-head around the constraint that decided real deals (cost,
 self-hosting, compliance, scale, ease of first setup). Without a constraint,
 agents often answer "it depends", which measures nothing.
 
-A competitor counts as evidence only when a source names it as the reason
-someone chose, or would choose, differently, together with the constraint: a
-lost deal, a migration request, an issue saying "<Competitor> handles this and
-you don't". A link to a competitor's blog post, a passing mention, or a feature
-comparison with no decision behind it does not count. When nothing qualifies,
+A competitor counts as evidence only when someone chose it, or says they will
+switch to it, because of a constraint: a lost deal, a churn reason, a migration
+request, an issue saying "we're moving to <Competitor> because <constraint>". A
+feature request that mentions a competitor ("<Competitor> has this, please add
+it"), a link to a competitor's blog post, or a feature comparison with no
+decision behind it does not count; at most, note it for the user as a lead. When nothing qualifies,
 create no head-to-heads and ask the user who they lose to and why.
 
 ## Sampling and cadence

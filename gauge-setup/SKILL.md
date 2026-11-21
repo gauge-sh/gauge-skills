@@ -176,7 +176,9 @@ Record which owned surfaces it exercises. See
 
 - Open-ended prompts for the situations developers are in when they need the
   category. They never name the product or a competitor.
-- One head-to-head per competitor the evidence actually names, built around the
+- One head-to-head per competitor that someone in the evidence chose, or is
+  switching to, because of a constraint (a feature request naming a competitor
+  does not count), built around the
   constraint that decided real deals ("we have to self-host", "free tier only").
 
 See [references/preference-prompts.md](references/preference-prompts.md).
