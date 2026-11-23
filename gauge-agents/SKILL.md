@@ -1,6 +1,6 @@
 ---
 name: gauge-agents
-description: Measure and improve how coding agents discover and use your product with Gauge Agents. Use when asked to run agent evaluations, test whether agents can use an SDK, API, CLI, MCP server, docs, or skill, find where agents struggle with onboarding, measure which tools agents choose, set up Gauge PR checks for a repository, or read and explain Gauge Agents results, sessions, and failed Gauge checks. Works through the Gauge CLI or the Gauge MCP. Not for ordinary unit tests or AI-search visibility tracking.
+description: Measure and improve how coding agents discover and use your product with Gauge Agents. Use when asked to set up or get started with Gauge, decide what to measure or track, run agent evaluations, test whether agents can use an SDK, API, CLI, MCP server, docs, or skill, find where agents struggle with onboarding, measure which tools agents choose, set up Gauge PR checks for a repository, or read and explain Gauge Agents results, sessions, and failed Gauge checks. Works through the Gauge CLI or the Gauge MCP. Not for ordinary unit tests or AI-search visibility tracking.
 ---
 
 # Gauge Agents
@@ -49,7 +49,8 @@ Choose guidance for the user's task:
 
 | Task | Read |
 | --- | --- |
-| First pilot or improving a product, skill, or docs | `gauge instructions hillclimb` |
+| Set up Gauge for a team, or decide what to measure | [references/setup.md](references/setup.md) |
+| Improve a product, skill, or docs by testing changes | `gauge instructions hillclimb` |
 | Workspace and local/hosted selection | `gauge instructions init` |
 | Save a reusable task-success evaluation | `gauge instructions eval` |
 | Save a product-choice measurement | `gauge instructions preference` |
@@ -82,6 +83,17 @@ available in the session. For discovery tests, expose the proposed command in
 help or docs rather than naming it in the task. Read the CLI rules instructions
 for the v4 stub/redirect format and inspect the trace to confirm a rule fired.
 
+## Set up Gauge for a team
+
+When someone asks to set up or get started with Gauge, asks what they should
+measure or track, or asks to refresh what Gauge tracks, read
+[references/setup.md](references/setup.md). It reads the repository and, with
+permission, the team's own context (analytics, calls, support, GitHub issues),
+drafts evals and preference prompts from that evidence, confirms them in one
+table, and creates them with the prompts tracked on a schedule that fits the
+org's plan. It works hosted and launches nothing; a test run and PR checks are
+offered afterwards (below).
+
 ## Set up repository PR checks
 
 When asked to set up Gauge PR checks or connect a repository, read
@@ -89,6 +101,15 @@ When asked to set up Gauge PR checks or connect a repository, read
 inputs for an npm package, native CLI, docs preview, or Skill, reusing the
 repository’s CI, authoring advisory Agent Preference cases, selecting relevant
 file changes, and verifying setup before committing.
+
+## Test and iterate on new measurements
+
+When the user asks to test measurements they just created (for example after
+setup), or asks which of their evals and prompts are worth
+keeping, read
+[references/test-and-iterate.md](references/test-and-iterate.md). It covers
+sizing and approving a short test run, the second-wording check for preference
+prompts, what to keep or rewrite, and how to report friction and objections.
 
 ## What Gauge is
 
